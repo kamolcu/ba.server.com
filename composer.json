@@ -7,7 +7,8 @@
 		"laravel/framework": "4.2.*",
 		"google/apiclient": "1.0.*@beta",
 		"kmd/logviewer": "1.2.0",
-		"darsain/laravel-console": "dev-master"
+		"darsain/laravel-console": "dev-master",
+		"raveren/kint": "0.9.1"
 	},
 	"autoload": {
 		"classmap": [
