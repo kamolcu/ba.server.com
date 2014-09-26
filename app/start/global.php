@@ -51,7 +51,9 @@ Log::useDailyFiles(storage_path().'/logs/'.$logFile);
 
 App::error(function(Exception $exception, $code)
 {
-	Log::error($exception);
+    $msg = sprintf('Full URL = %s, code = %s', Request::fullUrl(), $code);
+    Log::error($msg);
+    Log::error($exception);
 });
 
 /*
