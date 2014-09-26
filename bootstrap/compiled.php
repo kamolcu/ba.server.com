@@ -52,10 +52,6 @@ use Closure;
 use ArrayAccess;
 use ReflectionClass;
 use ReflectionParameter;
-class BindingResolutionException extends \Exception
-{
-    
-}
 class Container implements ArrayAccess
 {
     protected $resolved = array();
@@ -375,6 +371,14 @@ class Container implements ArrayAccess
         unset($this->bindings[$key]);
         unset($this->instances[$key]);
     }
+    public function __get($key)
+    {
+        return $this[$key];
+    }
+    public function __set($key, $value)
+    {
+        $this[$key] = $value;
+    }
 }
 namespace Symfony\Component\HttpKernel;
 
@@ -404,6 +408,7 @@ interface ResponsePreparerInterface
 namespace Illuminate\Foundation;
 
 use Closure;
+use Stack\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Config\FileLoader;
@@ -424,7 +429,7 @@ use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class Application extends Container implements HttpKernelInterface, TerminableInterface, ResponsePreparerInterface
 {
-    const VERSION = '4.2.8';
+    const VERSION = '4.2.9';
     protected $booted = false;
     protected $bootingCallbacks = array();
     protected $bootedCallbacks = array();
@@ -477,7 +482,7 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
     }
     public static function getBootstrapFile()
     {
-        return '/var/www/working/laravel-master/vendor/laravel/framework/src/Illuminate/Foundation' . '/start.php';
+        return '/Users/kamol/ba.server.com/vendor/laravel/framework/src/Illuminate/Foundation' . '/start.php';
     }
     public function startExceptionHandling()
     {
@@ -663,11 +668,11 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
     protected function getStackedClient()
     {
         $sessionReject = $this->bound('session.reject') ? $this['session.reject'] : null;
-        $client = (new \Stack\Builder())->push('Illuminate\\Cookie\\Guard', $this['encrypter'])->push('Illuminate\\Cookie\\Queue', $this['cookie'])->push('Illuminate\\Session\\Middleware', $this['session'], $sessionReject);
+        $client = (new Builder())->push('Illuminate\\Cookie\\Guard', $this['encrypter'])->push('Illuminate\\Cookie\\Queue', $this['cookie'])->push('Illuminate\\Session\\Middleware', $this['session'], $sessionReject);
         $this->mergeCustomMiddlewares($client);
         return $client->resolve($this);
     }
-    protected function mergeCustomMiddlewares(\Stack\Builder $stack)
+    protected function mergeCustomMiddlewares(Builder $stack)
     {
         foreach ($this->middlewares as $middleware) {
             list($class, $parameters) = array_values($middleware);
@@ -687,7 +692,7 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
     public function forgetMiddleware($class)
     {
         $this->middlewares = array_filter($this->middlewares, function ($m) use($class) {
-            return $m['class'] != $class;
+            return get_class($m['class']) != $class;
         });
     }
     public function handle(SymfonyRequest $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
@@ -851,14 +856,6 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
             $this->alias($key, $alias);
         }
     }
-    public function __get($key)
-    {
-        return $this[$key];
-    }
-    public function __set($key, $value)
-    {
-        $this[$key] = $value;
-    }
 }
 namespace Illuminate\Foundation;
 
@@ -908,6 +905,7 @@ class EnvironmentDetector
 }
 namespace Illuminate\Http;
 
+use SplFileInfo;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 class Request extends SymfonyRequest
@@ -971,6 +969,14 @@ class Request extends SymfonyRequest
     public function secure()
     {
         return $this->isSecure();
+    }
+    public function ip()
+    {
+        return $this->getClientIp();
+    }
+    public function ips()
+    {
+        return $this->getClientIps();
     }
     public function exists($key)
     {
@@ -1042,10 +1048,15 @@ class Request extends SymfonyRequest
     }
     public function hasFile($key)
     {
-        if (is_array($file = $this->file($key))) {
-            $file = head($file);
+        if (!is_array($files = $this->file($key))) {
+            $files = array($files);
         }
-        return $file instanceof \SplFileInfo && $file->getPath() != '';
+        foreach ($files as $file) {
+            if ($file instanceof SplFileInfo && $file->getPath() != '') {
+                return true;
+            }
+        }
+        return false;
     }
     public function header($key = null, $default = null)
     {
@@ -1360,6 +1371,7 @@ class Request
     }
     public function overrideGlobals()
     {
+        $this->server->set('QUERY_STRING', static::normalizeQueryString(http_build_query($this->query->all(), null, '&')));
         $_GET = $this->query->all();
         $_POST = $this->request->all();
         $_SERVER = $this->server->all();
@@ -1607,7 +1619,7 @@ class Request
             }
         }
         $host = strtolower(preg_replace('/:\\d+$/', '', trim($host)));
-        if ($host && !preg_match('/^\\[?(?:[a-zA-Z0-9-:\\]_]+\\.?)+$/', $host)) {
+        if ($host && '' !== preg_replace('/(?:^\\[)?[a-zA-Z0-9-:\\]_]+\\.?/', '', $host)) {
             throw new \UnexpectedValueException(sprintf('Invalid Host "%s"', $host));
         }
         if (count(self::$trustedHostPatterns) > 0) {
@@ -1696,6 +1708,10 @@ class Request
         if (null === $this->locale) {
             $this->setPhpDefaultLocale($locale);
         }
+    }
+    public function getDefaultLocale()
+    {
+        return $this->defaultLocale;
     }
     public function setLocale($locale)
     {
@@ -2163,12 +2179,12 @@ class ServerBag extends ParameterBag
                 $authorizationHeader = $this->parameters['REDIRECT_HTTP_AUTHORIZATION'];
             }
             if (null !== $authorizationHeader) {
-                if (0 === stripos($authorizationHeader, 'basic')) {
-                    $exploded = explode(':', base64_decode(substr($authorizationHeader, 6)));
+                if (0 === stripos($authorizationHeader, 'basic ')) {
+                    $exploded = explode(':', base64_decode(substr($authorizationHeader, 6)), 2);
                     if (count($exploded) == 2) {
                         list($headers['PHP_AUTH_USER'], $headers['PHP_AUTH_PW']) = $exploded;
                     }
-                } elseif (empty($this->parameters['PHP_AUTH_DIGEST']) && 0 === stripos($authorizationHeader, 'digest')) {
+                } elseif (empty($this->parameters['PHP_AUTH_DIGEST']) && 0 === stripos($authorizationHeader, 'digest ')) {
                     $headers['PHP_AUTH_DIGEST'] = $authorizationHeader;
                     $this->parameters['PHP_AUTH_DIGEST'] = $authorizationHeader;
                 }
@@ -3339,6 +3355,7 @@ class Arr
     }
     public static function forget(&$array, $keys)
     {
+        $original =& $array;
         foreach ((array) $keys as $key) {
             $parts = explode('.', $key);
             while (count($parts) > 1) {
@@ -3348,6 +3365,7 @@ class Arr
                 }
             }
             unset($array[array_shift($parts)]);
+            $array =& $original;
         }
     }
     public static function get($array, $key, $default = null)
@@ -3423,13 +3441,14 @@ class Arr
 }
 namespace Illuminate\Support;
 
+use Patchwork\Utf8;
 use Illuminate\Support\Traits\MacroableTrait;
 class Str
 {
     use MacroableTrait;
     public static function ascii($value)
     {
-        return \Patchwork\Utf8::toAscii($value);
+        return Utf8::toAscii($value);
     }
     public static function camel($value)
     {
@@ -3929,8 +3948,8 @@ class NamespacedItemResolver
         if (isset($this->parsed[$key])) {
             return $this->parsed[$key];
         }
-        $segments = explode('.', $key);
         if (strpos($key, '::') === false) {
+            $segments = explode('.', $key);
             $parsed = $this->parseBasicSegments($segments);
         } else {
             $parsed = $this->parseNamespacedSegments($key);
@@ -4120,10 +4139,6 @@ namespace Illuminate\Filesystem;
 
 use FilesystemIterator;
 use Symfony\Component\Finder\Finder;
-class FileNotFoundException extends \Exception
-{
-    
-}
 class Filesystem
 {
     public function exists($path)
@@ -4307,7 +4322,7 @@ class AliasLoader
     public static function getInstance(array $aliases = array())
     {
         if (is_null(static::$instance)) {
-            static::$instance = new static($aliases);
+            return static::$instance = new static($aliases);
         }
         $aliases = array_merge(static::$instance->getAliases(), $aliases);
         static::$instance->setAliases($aliases);
@@ -4722,7 +4737,7 @@ class Router implements HttpKernelInterface, RouteFiltererInterface
     protected function registerInspected($route, $controller, $method, &$names)
     {
         $action = array('uses' => $controller . '@' . $method);
-        $action['as'] = array_pull($names, $method);
+        $action['as'] = array_get($names, $method);
         $this->{$route['verb']}($route['uri'], $action);
     }
     protected function addFallthroughRoute($controller, $uri)
@@ -6716,6 +6731,20 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
     {
         return array_merge(array('creating', 'created', 'updating', 'updated', 'deleting', 'deleted', 'saving', 'saved', 'restoring', 'restored'), $this->observables);
     }
+    public function setObservableEvents(array $observables)
+    {
+        $this->observables = $observables;
+    }
+    public function addObservableEvents($observables)
+    {
+        $observables = is_array($observables) ? $observables : func_get_args();
+        $this->observables = array_unique(array_merge($this->observables, $observables));
+    }
+    public function removeObservableEvents($observables)
+    {
+        $observables = is_array($observables) ? $observables : func_get_args();
+        $this->observables = array_diff($this->observables, $observables);
+    }
     protected function increment($column, $amount = 1)
     {
         return $this->incrementOrDecrement($column, $amount, 'increment');
@@ -6828,6 +6857,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
     {
         foreach ($this->touches as $relation) {
             $this->{$relation}()->touch();
+            $this->{$relation}->touchOwners();
         }
     }
     public function touches($relation)
@@ -6960,6 +6990,10 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
     public function getKeyName()
     {
         return $this->primaryKey;
+    }
+    public function setKeyName($key)
+    {
+        $this->primaryKey = $key;
     }
     public function getQualifiedKeyName()
     {
@@ -7234,7 +7268,7 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
             $value = Carbon::createFromTimestamp($value);
         } elseif (preg_match('/^(\\d{4})-(\\d{2})-(\\d{2})$/', $value)) {
             $value = Carbon::createFromFormat('Y-m-d', $value)->startOfDay();
-        } elseif (!$value instanceof DateTime) {
+        } else {
             $value = Carbon::createFromFormat($format, $value);
         }
         return $value->format($format);
@@ -7287,14 +7321,21 @@ abstract class Model implements ArrayAccess, ArrayableInterface, JsonableInterfa
         $this->original[$attribute] = $this->attributes[$attribute];
         return $this;
     }
-    public function isDirty($attribute = null)
+    public function isDirty($attributes = null)
     {
         $dirty = $this->getDirty();
-        if (is_null($attribute)) {
+        if (is_null($attributes)) {
             return count($dirty) > 0;
-        } else {
-            return array_key_exists($attribute, $dirty);
         }
+        if (!is_array($attributes)) {
+            $attributes = func_get_args();
+        }
+        foreach ($attributes as $attribute) {
+            if (array_key_exists($attribute, $dirty)) {
+                return true;
+            }
+        }
+        return false;
     }
     public function getDirty()
     {
@@ -7450,6 +7491,7 @@ interface JsonableInterface
 }
 namespace Illuminate\Database;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Connectors\ConnectionFactory;
 class DatabaseManager implements ConnectionResolverInterface
 {
@@ -7464,12 +7506,18 @@ class DatabaseManager implements ConnectionResolverInterface
     }
     public function connection($name = null)
     {
-        $name = $name ?: $this->getDefaultConnection();
+        list($name, $type) = $this->parseConnectionName($name);
         if (!isset($this->connections[$name])) {
             $connection = $this->makeConnection($name);
+            $this->setPdoForType($connection, $type);
             $this->connections[$name] = $this->prepare($connection);
         }
         return $this->connections[$name];
+    }
+    protected function parseConnectionName($name)
+    {
+        $name = $name ?: $this->getDefaultConnection();
+        return Str::endsWith($name, array('::read', '::write')) ? explode('::', $name, 2) : array($name, null);
     }
     public function purge($name = null)
     {
@@ -7524,6 +7572,15 @@ class DatabaseManager implements ConnectionResolverInterface
         $connection->setReconnector(function ($connection) {
             $this->reconnect($connection->getName());
         });
+        return $connection;
+    }
+    protected function setPdoForType(Connection $connection, $type = null)
+    {
+        if ($type == 'read') {
+            $connection->setPdo($connection->getReadPdo());
+        } elseif ($type == 'write') {
+            $connection->setReadPdo($connection->getPdo());
+        }
         return $connection;
     }
     protected function getConfig($name)
@@ -7833,7 +7890,14 @@ class Store implements SessionInterface
     }
     public function setId($id)
     {
-        $this->id = $id ?: $this->generateSessionId();
+        if (!$this->isValidId($id)) {
+            $id = $this->generateSessionId();
+        }
+        $this->id = $id;
+    }
+    public function isValidId($id)
+    {
+        return is_string($id) && preg_match('/^[a-f0-9]{40}$/', $id);
     }
     protected function generateSessionId()
     {
@@ -7907,9 +7971,6 @@ class Store implements SessionInterface
     public function getOldInput($key = null, $default = null)
     {
         $input = $this->get('_old_input', array());
-        if (is_null($key)) {
-            return $input;
-        }
         return array_get($input, $key, $default);
     }
     public function set($name, $value)
@@ -8317,10 +8378,6 @@ namespace Illuminate\Encryption;
 
 use Symfony\Component\Security\Core\Util\StringUtils;
 use Symfony\Component\Security\Core\Util\SecureRandom;
-class DecryptException extends \RuntimeException
-{
-    
-}
 class Encrypter
 {
     protected $key;
@@ -9734,18 +9791,21 @@ class PhpEngine implements EngineInterface
     }
     protected function evaluatePath($__path, $__data)
     {
+        $obLevel = ob_get_level();
         ob_start();
         extract($__data);
         try {
             include $__path;
         } catch (\Exception $e) {
-            $this->handleViewException($e);
+            $this->handleViewException($e, $obLevel);
         }
         return ltrim(ob_get_clean());
     }
-    protected function handleViewException($e)
+    protected function handleViewException($e, $obLevel)
     {
-        ob_get_clean();
+        while (ob_get_level() > $obLevel) {
+            ob_end_clean();
+        }
         throw $e;
     }
 }
