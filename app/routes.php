@@ -11,7 +11,7 @@
 */
 
 Route::group(array(
-    'domain' => '{$subdomain}.ba-server.com',
+    'domain' => '{subdomain}.ba-server.com',
     'before' => 'isFunnel'
 ) , function ($subdomain) {
 
