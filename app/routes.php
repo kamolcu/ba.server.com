@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -11,7 +10,14 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('hello');
-});
+Route::get('/', array(
+    'uses' => 'HomeController@home'
+));
+
+Route::get('oauth2callback', array(
+    'uses' => 'HomeController@oAuth'
+));
+
+Route::get('info', array(
+    'uses' => 'HomeController@info'
+));
