@@ -50,7 +50,7 @@ class HomeController extends BaseController
             $client->authenticate($_GET['code']);
             $_SESSION['access_token'] = $client->getAccessToken();
             Session::put('client', serialize($client));
-            return Redirect::to(URL::route('home') . '/info');
+            return Redirect::to(URL::route('home') . '/info?start_date=2014-09-29&end_date=2014-09-30');
         }
     }
     public function info() {
