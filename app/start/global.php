@@ -51,7 +51,8 @@ Log::useDailyFiles(storage_path().'/logs/'.$logFile);
 
 App::error(function(Exception $exception, $code)
 {
-    if(strpos(Request::fullUrl(), 'http://ba-server.com/wiki') === false){
+    if(strpos(Request::fullUrl(), 'http://ba-server.com/wiki') === false ||
+        strpos(Request::fullUrl(), 'http://ba-server.com/w') === false){
         $msg = sprintf('Full URL = %s, code = %s', Request::fullUrl(), $code);
         Log::error($msg);
         Log::error($exception);

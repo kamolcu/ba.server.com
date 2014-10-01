@@ -10,14 +10,26 @@
 |
 */
 
+Route::group(array(
+    'domain' => 'funnel.ba-server.com'
+) , function () {
+
+    Route::get('/', array(
+        'as' => 'home',
+        'uses' => 'HomeController@home'
+    ));
+
+    Route::get('oauth2callback', array(
+        'uses' => 'HomeController@oAuth'
+    ));
+
+    Route::get('info', array(
+        'uses' => 'HomeController@info'
+    ));
+});
+
 Route::get('/', array(
-    'uses' => 'HomeController@home'
+    'as' => 'welcome',
+    'uses' => 'HomeController@showWelcome'
 ));
 
-Route::get('oauth2callback', array(
-    'uses' => 'HomeController@oAuth'
-));
-
-Route::get('info', array(
-    'uses' => 'HomeController@info'
-));

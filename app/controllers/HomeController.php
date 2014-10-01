@@ -26,7 +26,7 @@ class HomeController extends BaseController
 
             $client->setClientId('137589562420-65fhcns4kqiu1o2rukbf37289tqunjet.apps.googleusercontent.com');
             $client->setClientSecret('pEmBCrl9AhmqSthR2I1qi1oH');
-            $client->setRedirectUri('http://ba-server.com/oauth2callback');
+            $client->setRedirectUri(URL::route('home') . '/oauth2callback');
             //$client->setDeveloperKey('AIzaSyDGlZpsatv30xAitjk1U2Ra78zrTbbtzQs');
             $client->setScopes(array(
                 'https://www.googleapis.com/auth/analytics.readonly'
@@ -50,7 +50,7 @@ class HomeController extends BaseController
             $client->authenticate($_GET['code']);
             $_SESSION['access_token'] = $client->getAccessToken();
             Session::put('client', serialize($client));
-            return Redirect::to('http://ba-server.com/info');
+            return Redirect::to(URL::route('home') . '/info');
         }
     }
     public function info() {
