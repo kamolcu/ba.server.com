@@ -3,7 +3,7 @@ use Carbon\Carbon;
 
 class Helper
 {
-    public function getDefaultStartDate($now) {
+    public function getDefaultStartDate($now = null) {
         if (empty($now)) $now = Carbon::now();
         // Get nearest Monday of the current week
         if ($now->dayOfWeek == Carbon::MONDAY) {
@@ -16,7 +16,7 @@ class Helper
         return $now;
     }
 
-    public function getDefaultEndDate($now) {
+    public function getDefaultEndDate($now = null) {
         if (empty($now)) $now = Carbon::now();
         $now->subDays(1);
         return $now;
