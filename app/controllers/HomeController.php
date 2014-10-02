@@ -99,6 +99,9 @@ class HomeController extends BaseController
             ));
             s($result);
 
+            $segments = $this->management_segments->listManagementSegments();
+            s($segments);
+
         }
     }
 }
