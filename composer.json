@@ -15,9 +15,11 @@
 			"app/commands",
 			"app/controllers",
 			"app/models",
+			"app/Helper.php",
 			"app/database/migrations",
 			"app/database/seeds",
-			"app/tests/TestCase.php"
+			"app/tests/TestCase.php",
+			"app/tests/HelperTest.php"
 		]
 	},
 	"scripts": {
