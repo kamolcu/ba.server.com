@@ -18,15 +18,15 @@ class HomeController extends BaseController
         return View::make('hello');
     }
 
-    public function home() {
+    public function home($subdomain) {
         $client = null;
         if (!Session::has('client')) {
             $client = new Google_Client();
-            $client->setApplicationName("Test Application");
+            $client->setApplicationName("Funnel Application");
 
             $client->setClientId('137589562420-65fhcns4kqiu1o2rukbf37289tqunjet.apps.googleusercontent.com');
             $client->setClientSecret('pEmBCrl9AhmqSthR2I1qi1oH');
-            $client->setRedirectUri(URL::route('home') . '/oauth2callback');
+            $client->setRedirectUri(URL::route('home', $subdomain) . '/oauth2callback');
             //$client->setDeveloperKey('AIzaSyDGlZpsatv30xAitjk1U2Ra78zrTbbtzQs');
             $client->setScopes(array(
                 'https://www.googleapis.com/auth/analytics.readonly'
@@ -35,8 +35,8 @@ class HomeController extends BaseController
             $client = unserialize(Session::get('client'));
         }
 
-        if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
-            $client->setAccessToken($_SESSION['access_token']);
+        if (Session::has('access_token')) {
+            $client->setAccessToken(Session::get('access_token'));
             Session::put('client', serialize($client));
         } else {
             $authUrl = $client->createAuthUrl();
