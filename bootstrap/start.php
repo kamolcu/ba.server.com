@@ -24,11 +24,14 @@ $app = new Illuminate\Foundation\Application;
 |
 */
 
-$env = $app->detectEnvironment(array(
+$env = $app->detectEnvironment(function(){
+    $hostname = gethostname();
+    if (str_is('Kamols-MacBook-Air.local', $hostname)) {
+        return 'local';
+    }
+    return 'production';
 
-	'local' => array('homestead'),
-
-));
+});
 
 /*
 |--------------------------------------------------------------------------

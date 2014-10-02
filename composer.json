@@ -5,10 +5,13 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.2.*",
-		"google/apiclient": "1.0.*@beta",
+		"google/apiclient": "1.0.6-beta",
 		"kmd/logviewer": "1.2.0",
 		"darsain/laravel-console": "dev-master",
 		"raveren/kint": "0.9.1"
+	},
+	"require-dev": {
+		"way/generators": "2.6.1"
 	},
 	"autoload": {
 		"classmap": [

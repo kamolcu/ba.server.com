@@ -123,6 +123,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Darsain\Console\ConsoleServiceProvider',
 		'Kmd\Logviewer\LogviewerServiceProvider',
+		'Way\Generators\GeneratorsServiceProvider'
 
 	),
 
