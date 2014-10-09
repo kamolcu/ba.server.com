@@ -11,10 +11,10 @@ class ChannelManager
         $channel_exists = App::make('Helper')->isChannelExists($row[self::CHANNEL_NAME], $datasetId);
         if (!$channel_exists) {
             $inputs = array(
-                'name' => $data[self::CHANNEL_NAME],
-                'sessions' => $data[self::SESSION],
-                'bounce_rate' => $data[self::BOUNCE_RATE],
-                'conversion_rate' => $data[self::TX],
+                'name' => $row[self::CHANNEL_NAME],
+                'sessions' => $row[self::SESSION],
+                'bounce_rate' => $row[self::BOUNCE_RATE],
+                'conversion_rate' => $row[self::TX],
                 'dataset_id' => $datasetId,
             );
             $rules = array();
