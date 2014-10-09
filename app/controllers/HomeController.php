@@ -63,44 +63,42 @@ class HomeController extends BaseController
         if ($client->getAccessToken()) {
             $analytics = new Google_Service_Analytics($client);
 
-            $result = $analytics->data_ga->get('ga:68738788', $startDate, $endDate, 'ga:sessions,ga:percentNewSessions,ga:newUsers,ga:bounceRate,ga:pageviewsPerSession,ga:avgSessionDuration,ga:transactions,ga:transactionRevenue,ga:transactionsPerSession', array(
-                'dimensions' => 'ga:channelGrouping',
-                'sort' => '-ga:sessions'
-            ));
+
+            $result = App::make('Helper')->getChannelsData($analytics, $startDate, $endDate);
             s($result);
 
-            $result = $analytics->data_ga->get('ga:68738788', $startDate, $endDate, 'ga:sessions,ga:percentNewSessions,ga:newUsers,ga:bounceRate,ga:pageviewsPerSession,ga:avgSessionDuration,ga:transactions,ga:transactionRevenue,ga:transactionsPerSession', array(
-                'dimensions' => 'ga:source',
-                'sort' => '-ga:sessions',
-                'filters' => 'ga:channelGrouping=@other'
-            ));
-            s($result);
+            // $result = $analytics->data_ga->get('ga:68738788', $startDate, $endDate, App::make('Helper')->matrixs, array(
+            //     'dimensions' => 'ga:source',
+            //     'sort' => '-ga:sessions',
+            //     'filters' => 'ga:channelGrouping=@other'
+            // ));
+            // s($result);
 
-            $paths = array(
-                'ga:landingPagePath=@/product',
-                'ga:landingPagePath=@/line',
-                'ga:landingPagePath==/',
-                'ga:landingPagePath=@/category',
-                'ga:landingPagePath=@/search',
-                'ga:landingPagePath=@/everyday-wow'
-            );
-            foreach ($paths as $path) {
-                $result = $analytics->data_ga->get('ga:68738788', $startDate, $endDate, 'ga:sessions,ga:percentNewSessions,ga:newUsers,ga:bounceRate,ga:pageviewsPerSession,ga:avgSessionDuration,ga:transactions,ga:transactionRevenue,ga:transactionsPerSession', array(
-                    'dimensions' => 'ga:landingPagePath',
-                    'sort' => '-ga:sessions',
-                    'filters' => $path
-                ));
-                s($result);
-            }
+            // $paths = array(
+            //     'ga:landingPagePath=@/product',
+            //     'ga:landingPagePath=@/line',
+            //     'ga:landingPagePath==/',
+            //     'ga:landingPagePath=@/category',
+            //     'ga:landingPagePath=@/search',
+            //     'ga:landingPagePath=@/everyday-wow'
+            // );
+            // foreach ($paths as $path) {
+            //     $result = $analytics->data_ga->get('ga:68738788', $startDate, $endDate, App::make('Helper')->matrixs, array(
+            //         'dimensions' => 'ga:landingPagePath',
+            //         'sort' => '-ga:sessions',
+            //         'filters' => $path
+            //     ));
+            //     s($result);
+            // }
 
-            $result = $analytics->data_ga->get('ga:68738788', $startDate, $endDate, 'ga:sessions,ga:percentNewSessions,ga:newUsers,ga:bounceRate,ga:pageviewsPerSession,ga:avgSessionDuration,ga:transactions,ga:transactionRevenue,ga:transactionsPerSession', array(
-                'dimensions' => 'ga:deviceCategory',
-                'sort' => '-ga:sessions'
-            ));
-            s($result);
+            // $result = $analytics->data_ga->get('ga:68738788', $startDate, $endDate, App::make('Helper')->matrixs, array(
+            //     'dimensions' => 'ga:deviceCategory',
+            //     'sort' => '-ga:sessions'
+            // ));
+            // s($result);
 
-            $segments = $analytics->management_segments->listManagementSegments();
-            s($segments);
+            // $segments = $analytics->management_segments->listManagementSegments();
+            // s($segments);
 
         }
     }
