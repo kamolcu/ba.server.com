@@ -10,7 +10,7 @@ class HomeController extends BaseController
     | based routes. That's great! Here is an example controller method to
     | get you started. To route to this controller, just add the route:
     |
-    |	Route::get('/', 'HomeController@showWelcome');
+    |   Route::get('/', 'HomeController@showWelcome');
     |
     */
 
@@ -63,9 +63,12 @@ class HomeController extends BaseController
         if ($client->getAccessToken()) {
             $analytics = new Google_Service_Analytics($client);
 
-
             $result = App::make('Helper')->getChannelsData($analytics, $startDate, $endDate);
-            s($result);
+            $datasetName = 'Channels';
+            $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
+            foreach ($result->rows as $data) {
+                App::make('ChannelManager')->updateData($data, $ds->id);
+            }
 
             // $result = $analytics->data_ga->get('ga:68738788', $startDate, $endDate, App::make('Helper')->matrixs, array(
             //     'dimensions' => 'ga:source',
@@ -99,6 +102,7 @@ class HomeController extends BaseController
 
             // $segments = $analytics->management_segments->listManagementSegments();
             // s($segments);
+
 
         }
     }
