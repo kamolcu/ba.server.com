@@ -1,7 +1,7 @@
 <?php
 class DatasetManager
 {
-    public function updateData() {
+    public function updateData($datasetName, $startDate, $endDate) {
         $exists = App::make('Helper')->isDatasetExists($datasetName, $startDate, $endDate);
         if (!$exists) {
             $inputs = array(
