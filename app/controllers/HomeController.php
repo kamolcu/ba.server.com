@@ -60,7 +60,7 @@ class HomeController extends BaseController
         $endDate = Input::get('end_date');
 
         $client = unserialize(Session::get('client'));
-        if ($client->getAccessToken()) {
+        if (!empty($client) && $client->getAccessToken()) {
             $analytics = new Google_Service_Analytics($client);
 
             $result = App::make('Helper')->getChannelsData($analytics, $startDate, $endDate);
@@ -104,6 +104,8 @@ class HomeController extends BaseController
             // s($segments);
 
 
+        }else{
+            return Redirect::route('home');
         }
     }
 }
