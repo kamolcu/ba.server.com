@@ -87,13 +87,53 @@ class HomeController extends BaseController
 
                 $datasetName = 'Landing Line';
                 $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
-
                 $filters = array(
                     'filters' => 'ga:landingPagePath=@/line'
                 );
                 $result = App::make('Helper')->getLandingData($analytics, $startDate, $endDate, $filters);
                 $totalResults = $result->totalsForAllResults;
                 App::make('LandingManager')->updateData($datasetName, $totalResults, $ds->id);
+
+                $datasetName = 'Landing Direct';
+                $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
+                $filters = array(
+                    'filters' => 'ga:landingPagePath==/'
+                );
+                $result = App::make('Helper')->getLandingData($analytics, $startDate, $endDate, $filters);
+                $totalResults = $result->totalsForAllResults;
+                App::make('LandingManager')->updateData($datasetName, $totalResults, $ds->id);
+
+                $datasetName = 'Landing Category';
+                $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
+                $filters = array(
+                    'filters' => 'ga:landingPagePath=@/category'
+                );
+                $result = App::make('Helper')->getLandingData($analytics, $startDate, $endDate, $filters);
+                $totalResults = $result->totalsForAllResults;
+                App::make('LandingManager')->updateData($datasetName, $totalResults, $ds->id);
+
+                $datasetName = 'Landing Search';
+                $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
+                $filters = array(
+                    'filters' => 'ga:landingPagePath=@/search'
+                );
+                $result = App::make('Helper')->getLandingData($analytics, $startDate, $endDate, $filters);
+                $totalResults = $result->totalsForAllResults;
+                App::make('LandingManager')->updateData($datasetName, $totalResults, $ds->id);
+
+                $datasetName = 'Landing Everyday-wow';
+                $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
+                $filters = array(
+                    'filters' => 'ga:landingPagePath=@/everyday-wow'
+                );
+                $result = App::make('Helper')->getLandingData($analytics, $startDate, $endDate, $filters);
+                $totalResults = $result->totalsForAllResults;
+                App::make('LandingManager')->updateData($datasetName, $totalResults, $ds->id);
+
+                $datasetName = 'Device';
+                $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
+                $result = App::make('Helper')->getDeviceData($analytics, $startDate, $endDate);
+
             }
             catch(Google_Auth_Exception $gx) {
                 Log::error($gx->getMessage());
