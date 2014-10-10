@@ -105,7 +105,7 @@ class HomeController extends BaseController
 
 
         }else{
-            return Redirect::route('home');
+            return Redirect::to('/');
         }
     }
 }
