@@ -41,6 +41,18 @@ class Helper
         return $now;
     }
 
+    public function getLandingProductData($analytics, $startDate, $endDate) {
+        $dim = array(
+            'dimensions' => 'ga:landingPagePath'
+        );
+        $sort = array(
+            'sort' => '-ga:sessions'
+        );
+        $filters = array(
+            'filters' => 'ga:landingPagePath=@/product'
+        );
+        return $this->getGAData($analytics, $startDate, $endDate, $this->matrixs, $dim, $sort, $filters);
+    }
     public function getOtherChannelsData($analytics, $startDate, $endDate) {
         $dim = array(
             'dimensions' => 'ga:source'
