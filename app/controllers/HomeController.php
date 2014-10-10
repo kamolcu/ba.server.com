@@ -79,10 +79,21 @@ class HomeController extends BaseController
                 }
 
                 $datasetName = 'Landing Product';
+                $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
                 //totalsForAllResults, ga:sessions
-                $result = App::make('Helper')->getLandingProductData($analytics, $startDate, $endDate);
-                $sessionCount = $result->totalsForAllResults['ga:sessions'];
+                $result = App::make('Helper')->getLandingProductData($analytics, $startDate, $endDate, $filters);
+                $totalResults = $result->totalsForAllResults;
+                App::make('LandingManager')->updateData($datasetName, $totalResults, $ds->id);
 
+                $datasetName = 'Landing Line';
+                $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
+
+                $filters = array(
+                    'filters' => 'ga:landingPagePath=@/line'
+                );
+                $result = App::make('Helper')->getLandingData($analytics, $startDate, $endDate, $filters);
+                $totalResults = $result->totalsForAllResults;
+                App::make('LandingManager')->updateData($datasetName, $totalResults, $ds->id);
             }
             catch(Google_Auth_Exception $gx) {
                 Log::error($gx->getMessage());
