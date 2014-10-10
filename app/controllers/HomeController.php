@@ -70,6 +70,13 @@ class HomeController extends BaseController
                 App::make('ChannelManager')->updateData($data, $ds->id);
             }
 
+            $result = App::make('Helper')->getOtherChannelsData($analytics, $startDate, $endDate);
+            $datasetName = 'Other Channels';
+            $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
+            foreach ($result->rows as $data) {
+                App::make('ChannelManager')->updateData($data, $ds->id);
+            }
+
             // $result = $analytics->data_ga->get('ga:68738788', $startDate, $endDate, App::make('Helper')->matrixs, array(
             //     'dimensions' => 'ga:source',
             //     'sort' => '-ga:sessions',

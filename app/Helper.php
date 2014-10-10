@@ -41,6 +41,18 @@ class Helper
         return $now;
     }
 
+    public function getOtherChannelsData($analytics, $startDate, $endDate) {
+        $dim = array(
+            'dimensions' => 'ga:source'
+        );
+        $sort = array(
+            'sort' => '-ga:sessions'
+        );
+        $filters = array(
+            'filters' => 'ga:channelGrouping=@other'
+        );
+        return $this->getGAData($analytics, $startDate, $endDate, $this->matrixs, $dim, $sort, $filters);
+    }
     public function getChannelsData($analytics, $startDate, $endDate) {
         $dim = array(
             'dimensions' => 'ga:channelGrouping'
