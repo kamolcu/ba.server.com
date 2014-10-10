@@ -34,3 +34,32 @@ Route::get('/', array(
     'uses' => 'HomeController@showWelcome'
 ));
 
+Route::get('/{a}', array(
+    'as' => 'w1',
+    'uses' => 'HomeController@showWelcome'
+));
+
+Route::get('/{a}/{b}', array(
+    'as' => 'w2',
+    'uses' => 'HomeController@showWelcome'
+));
+
+Route::get('/{a}/{b}/{c}', array(
+    'as' => 'w3',
+    'uses' => 'HomeController@showWelcome'
+));
+
+Route::get('/{a}/{b}/{c}/{d}', array(
+    'as' => 'w4',
+    'uses' => 'HomeController@showWelcome'
+));
+
+Route::get('/{a}/{b}/{c}/{d}/{e}', array(
+    'as' => 'w5',
+    'uses' => 'HomeController@showWelcome'
+));
+
+Route::get('/{a}/{b}/{c}/{d}/{e}/{f}', array(
+    'as' => 'w6',
+    'uses' => 'HomeController@showWelcome'
+));
