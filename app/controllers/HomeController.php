@@ -81,7 +81,7 @@ class HomeController extends BaseController
                 $datasetName = 'Landing Product';
                 $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
                 //totalsForAllResults, ga:sessions
-                $result = App::make('Helper')->getLandingProductData($analytics, $startDate, $endDate, $filters);
+                $result = App::make('Helper')->getLandingProductData($analytics, $startDate, $endDate);
                 $totalResults = $result->totalsForAllResults;
                 App::make('LandingManager')->updateData($datasetName, $totalResults, $ds->id);
 
