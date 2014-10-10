@@ -133,6 +133,9 @@ class HomeController extends BaseController
                 $datasetName = 'Device';
                 $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
                 $result = App::make('Helper')->getDeviceData($analytics, $startDate, $endDate);
+                foreach ($result->rows as $data) {
+                    App::make('DeviceManager')->updateData($data, $ds->id);
+                }
 
             }
             catch(Google_Auth_Exception $gx) {
