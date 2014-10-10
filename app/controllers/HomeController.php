@@ -61,22 +61,34 @@ class HomeController extends BaseController
 
         $client = unserialize(Session::get('client'));
         if (!empty($client) && $client->getAccessToken()) {
-            $analytics = new Google_Service_Analytics($client);
+            try {
+                $analytics = new Google_Service_Analytics($client);
 
-            $result = App::make('Helper')->getChannelsData($analytics, $startDate, $endDate);
-            $datasetName = 'Channels';
-            $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
-            foreach ($result->rows as $data) {
-                App::make('ChannelManager')->updateData($data, $ds->id);
+                $result = App::make('Helper')->getChannelsData($analytics, $startDate, $endDate);
+                $datasetName = 'Channels';
+                $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
+                foreach ($result->rows as $data) {
+                    App::make('ChannelManager')->updateData($data, $ds->id);
+                }
+
+                $result = App::make('Helper')->getOtherChannelsData($analytics, $startDate, $endDate);
+                $datasetName = 'Other Channels';
+                $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
+                foreach ($result->rows as $data) {
+                    App::make('ChannelManager')->updateData($data, $ds->id);
+                }
+
+                $datasetName = 'Landing Product';
+                //totalsForAllResults, ga:sessions
+                $result = App::make('Helper')->getLandingProductData($analytics, $startDate, $endDate);
+                $sessionCount = $result->totalsForAllResults['ga:sessions'];
+
             }
-
-            $result = App::make('Helper')->getOtherChannelsData($analytics, $startDate, $endDate);
-            $datasetName = 'Other Channels';
-            $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
-            foreach ($result->rows as $data) {
-                App::make('ChannelManager')->updateData($data, $ds->id);
+            catch(Google_Auth_Exception $gx) {
+                Log::error($gx->getMessage());
+                Session::clear();
+                return Redirect::to('/');
             }
-
             // $result = $analytics->data_ga->get('ga:68738788', $startDate, $endDate, App::make('Helper')->matrixs, array(
             //     'dimensions' => 'ga:source',
             //     'sort' => '-ga:sessions',
@@ -111,7 +123,7 @@ class HomeController extends BaseController
             // s($segments);
 
 
-        }else{
+        } else {
             Session::clear();
             return Redirect::to('/');
         }
