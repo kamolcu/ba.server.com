@@ -105,6 +105,7 @@ class HomeController extends BaseController
 
 
         }else{
+            Session::clear();
             return Redirect::to('/');
         }
     }
