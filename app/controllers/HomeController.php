@@ -63,109 +63,13 @@ class HomeController extends BaseController
         if (!empty($client) && $client->getAccessToken()) {
             try {
                 $analytics = new Google_Service_Analytics($client);
-
-                $result = App::make('Helper')->getChannelsData($analytics, $startDate, $endDate);
-                $datasetName = 'Channels';
-                $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
-                foreach ($result->rows as $data) {
-                    App::make('ChannelManager')->updateData($data, $ds->id);
-                }
-
-                $result = App::make('Helper')->getOtherChannelsData($analytics, $startDate, $endDate);
-                $datasetName = 'Other Channels';
-                $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
-                foreach ($result->rows as $data) {
-                    App::make('ChannelManager')->updateData($data, $ds->id);
-                }
-
-                $datasetName = 'Landing Product';
-                $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
-                //totalsForAllResults, ga:sessions
-                $result = App::make('Helper')->getLandingProductData($analytics, $startDate, $endDate);
-                $totalResults = $result->totalsForAllResults;
-                App::make('LandingManager')->updateData($datasetName, $totalResults, $ds->id);
-
-                $datasetName = 'Landing Line';
-                $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
-                $filters = array(
-                    'filters' => 'ga:landingPagePath=@/line'
-                );
-                $result = App::make('Helper')->getLandingData($analytics, $startDate, $endDate, $filters);
-                $totalResults = $result->totalsForAllResults;
-                App::make('LandingManager')->updateData($datasetName, $totalResults, $ds->id);
-
-                $datasetName = 'Landing Direct';
-                $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
-                $filters = array(
-                    'filters' => 'ga:landingPagePath==/'
-                );
-                $result = App::make('Helper')->getLandingData($analytics, $startDate, $endDate, $filters);
-                $totalResults = $result->totalsForAllResults;
-                App::make('LandingManager')->updateData($datasetName, $totalResults, $ds->id);
-
-                $datasetName = 'Landing Category';
-                $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
-                $filters = array(
-                    'filters' => 'ga:landingPagePath=@/category'
-                );
-                $result = App::make('Helper')->getLandingData($analytics, $startDate, $endDate, $filters);
-                $totalResults = $result->totalsForAllResults;
-                App::make('LandingManager')->updateData($datasetName, $totalResults, $ds->id);
-
-                $datasetName = 'Landing Search';
-                $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
-                $filters = array(
-                    'filters' => 'ga:landingPagePath=@/search'
-                );
-                $result = App::make('Helper')->getLandingData($analytics, $startDate, $endDate, $filters);
-                $totalResults = $result->totalsForAllResults;
-                App::make('LandingManager')->updateData($datasetName, $totalResults, $ds->id);
-
-                $datasetName = 'Landing Everyday-wow';
-                $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
-                $filters = array(
-                    'filters' => 'ga:landingPagePath=@/everyday-wow'
-                );
-                $result = App::make('Helper')->getLandingData($analytics, $startDate, $endDate, $filters);
-                $totalResults = $result->totalsForAllResults;
-                App::make('LandingManager')->updateData($datasetName, $totalResults, $ds->id);
-
-                $datasetName = 'Device';
-                $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
-                $result = App::make('Helper')->getDeviceData($analytics, $startDate, $endDate);
-                foreach ($result->rows as $data) {
-                    App::make('DeviceManager')->updateData($data, $ds->id);
-                }
-
+                App::make('DataManager')->loadData($analytics, $startDate, $endDate);
             }
             catch(Google_Auth_Exception $gx) {
                 Log::error($gx->getMessage());
                 Session::clear();
                 return Redirect::to('/');
             }
-            // $result = $analytics->data_ga->get('ga:68738788', $startDate, $endDate, App::make('Helper')->matrixs, array(
-            //     'dimensions' => 'ga:source',
-            //     'sort' => '-ga:sessions',
-            //     'filters' => 'ga:channelGrouping=@other'
-            // ));
-            // s($result);
-
-            // $paths = array(
-            //     'ga:landingPagePath=@/product',
-            //     'ga:landingPagePath=@/line',
-            //     'ga:landingPagePath==/',
-            //     'ga:landingPagePath=@/category',
-            //     'ga:landingPagePath=@/search',
-            //     'ga:landingPagePath=@/everyday-wow'
-            // );
-            // foreach ($paths as $path) {
-            //     $result = $analytics->data_ga->get('ga:68738788', $startDate, $endDate, App::make('Helper')->matrixs, array(
-            //         'dimensions' => 'ga:landingPagePath',
-            //         'sort' => '-ga:sessions',
-            //         'filters' => $path
-            //     ));
-            //     s($result);
-            // }
 
             // $result = $analytics->data_ga->get('ga:68738788', $startDate, $endDate, App::make('Helper')->matrixs, array(
             //     'dimensions' => 'ga:deviceCategory',
@@ -175,7 +79,6 @@ class HomeController extends BaseController
 
             // $segments = $analytics->management_segments->listManagementSegments();
             // s($segments);
-
 
         } else {
             Session::clear();
