@@ -5,7 +5,7 @@ class Helper
 {
     // Not exceed 10 matrics
     public $matrixs = 'ga:sessions,ga:percentNewSessions,ga:newUsers,ga:bounceRate,ga:pageviewsPerSession,ga:avgSessionDuration,ga:transactions,ga:transactionRevenue,ga:transactionsPerSession';
-
+    public $matrix_segment = 'ga:goal1Starts,ga:goal1Completions,ga:sessions';
     public function isDeviceExists($name, $datasetId)
     {
         $row = $this->getDevice($name, $datasetId);
@@ -14,6 +14,16 @@ class Helper
     public function getDevice($name, $datasetId)
     {
         $row = Device::whereName($name)->where('dataset_id', '=', $datasetId)->first();
+        return $row;
+    }
+    public function isSegmentExists($name, $datasetId)
+    {
+        $row = $this->getSegment($name, $datasetId);
+        return !empty($row);
+    }
+    public function getSegment($name, $datasetId)
+    {
+        $row = GoalFunnel::whereName($name)->where('dataset_id', '=', $datasetId)->first();
         return $row;
     }
     public function isLandingExists($name, $datasetId)
@@ -59,6 +69,15 @@ class Helper
         $now->subDays(1);
         return $now;
     }
+    public function getSegmentData($analytics, $startDate, $endDate, $segments) {
+        $dim = array(
+            'dimensions' => 'ga:deviceCategory'
+        );
+        $sort = array(
+            'sort' => '-ga:sessions'
+        );
+        return $this->getGAData($analytics, $startDate, $endDate, $this->matrix_segment, $dim, $sort, array(), $segments);
+    }
     public function getLandingData($analytics, $startDate, $endDate, $filters)
     {
         $dim = array(
@@ -69,18 +88,6 @@ class Helper
         );
         return $this->getGAData($analytics, $startDate, $endDate, $this->matrixs, $dim, $sort, $filters);
     }
-    // public function getLandingProductData($analytics, $startDate, $endDate) {
-    //     $dim = array(
-    //         'dimensions' => 'ga:landingPagePath'
-    //     );
-    //     $sort = array(
-    //         'sort' => '-ga:sessions'
-    //     );
-    //     $filters = array(
-    //         'filters' => 'ga:landingPagePath=@/product'
-    //     );
-    //     return $this->getGAData($analytics, $startDate, $endDate, $this->matrixs, $dim, $sort, $filters);
-    // }
     public function getOtherChannelsData($analytics, $startDate, $endDate) {
         $dim = array(
             'dimensions' => 'ga:source'
@@ -117,7 +124,6 @@ class Helper
         $result = $analytics->data_ga->get(Config::get('config.ga-profile') , $startDate, $endDate, $matrixs, $options);
         return $result;
     }
-
     public function create($modelName, $attributes = array() , $rules = array()) {
         $model = new $modelName();
         if (!empty($rules)) {
@@ -131,7 +137,6 @@ class Helper
         }
         return $model->save();
     }
-
     public function update($modelName, $modelId, $attributes = array() , $rules = array()) {
         $model = $modelName::find($modelId);
         if ($model) {
