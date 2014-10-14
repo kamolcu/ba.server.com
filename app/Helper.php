@@ -152,4 +152,8 @@ class Helper
             return $model->save();
         }
     }
+
+    public function formatDecimal($value, $comma = ',') {
+        return number_format($value, 2, '.', $comma);
+    }
 }

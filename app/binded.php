@@ -7,3 +7,4 @@ App::singleton('LandingManager', 'LandingManager');
 App::singleton('DeviceManager', 'DeviceManager');
 App::singleton('DataManager', 'DataManager');
 App::singleton('SegmentManager', 'SegmentManager');
+App::singleton('StatsManager', 'StatsManager');
