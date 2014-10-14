@@ -27,6 +27,11 @@ Route::group(array(
     Route::get('info', array(
         'uses' => 'HomeController@info'
     ));
+
+    Route::get('summary', array(
+        'as' => 'summary',
+        'uses' => 'HomeController@summaryView'
+    ));
 });
 
 Route::get('/', array(

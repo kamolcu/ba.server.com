@@ -14,6 +14,9 @@ class HomeController extends BaseController
     |
     */
 
+    public function summaryView() {
+        return View::make('report.summary');
+    }
     public function showWelcome() {
         return '';
     }
