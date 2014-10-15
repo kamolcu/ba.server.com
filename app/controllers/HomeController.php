@@ -49,30 +49,30 @@ class HomeController extends BaseController
 
         // TODO: validation of date inputs
 
-        Session::put('main_start', $Input['main_start']);
-        Session::put('main_end', $Input['main_end']);
-        Session::put('history_start', $Input['history_start']);
-        Session::put('history_end', $Input['history_end']);
+        Session::put('main_start', Input::get('main_start'));
+        Session::put('main_end', Input::get('main_end'));
+        Session::put('history_start', Input::get('history_start'));
+        Session::put('history_end', Input::get('history_end'));
 
         $client = unserialize(Session::get('client'));
         if (!empty($client) && $client->getAccessToken()) {
             try {
                 $analytics = new Google_Service_Analytics($client);
 
-                $msg = sprintf('Process dataset %s to %s', $Input['main_start'], $Input['main_end']);
+                $msg = sprintf('Process dataset %s to %s', Input::get('main_start'), Input::get('main_end'));
                 Log::debug($msg);
 
-                App::make('DataManager')->loadData($analytics, $Input['main_start'], $Input['main_end']);
+                App::make('DataManager')->loadData($analytics, Input::get('main_start'), Input::get('main_end'));
 
-                $msg = sprintf('Finised dataset %s to %s', $Input['main_start'], $Input['main_end']);
+                $msg = sprintf('Finised dataset %s to %s', Input::get('main_start'), Input::get('main_end'));
                 Log::debug($msg);
 
-                $msg = sprintf('Process dataset %s to %s', $Input['history_start'], $Input['history_end']);
+                $msg = sprintf('Process dataset %s to %s', Input::get('history_start'), Input::get('history_end'));
                 Log::debug($msg);
 
-                App::make('DataManager')->loadData($analytics, $Input['history_start'], $Input['history_end']);
+                App::make('DataManager')->loadData($analytics, Input::get('history_start'), Input::get('history_end'));
 
-                $msg = sprintf('Finised dataset %s to %s', $Input['history_start'], $Input['history_end']);
+                $msg = sprintf('Finised dataset %s to %s', Input::get('history_start'), Input::get('history_end'));
                 Log::debug($msg);
             }
             catch(Google_Auth_Exception $gx) {
