@@ -16,8 +16,8 @@ Route::group(array(
 ) , function ($subdomain) {
 
     Route::get('/', array(
-        'as' => 'home',
-        'uses' => 'HomeController@home'
+        'as' => 'front',
+        'uses' => 'HomeController@frontPage'
     ));
 
     Route::get('oauth2callback', array(
@@ -32,7 +32,16 @@ Route::group(array(
         'as' => 'summary',
         'uses' => 'HomeController@summaryView'
     ));
+
+    Route::any('/compare', array(
+        'as' => 'compare',
+        'uses' => 'HomeController@compare'
+    ));
 });
+
+Route::get('oauth2callback', array(
+    'uses' => 'HomeController@oAuth'
+));
 
 Route::get('/', array(
     'as' => 'front',

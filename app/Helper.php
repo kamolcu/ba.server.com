@@ -52,6 +52,12 @@ class Helper
         $row = DataSet::whereName($name)->where('start_date', '=', $startDate)->where('end_date', '=', $endDate)->first();
         return $row;
     }
+    public function getDefaultHistoryStartDate($now = null) {
+        return $this->getDefaultStartDate()->subDays(7);
+    }
+    public function getDefaultHistoryEndDate($now = null) {
+        return $this->getDefaultEndDate()->subDays(7);
+    }
     public function getDefaultStartDate($now = null) {
         if (empty($now)) $now = Carbon::now();
         // Get nearest Monday of the current week
