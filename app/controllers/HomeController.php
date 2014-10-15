@@ -34,6 +34,7 @@ class HomeController extends BaseController
             Session::put('client', serialize($client));
         } else {
             $authUrl = $client->createAuthUrl();
+            Session::put('client', serialize($client));
             return Redirect::to($authUrl); // Google's page
 
         }
