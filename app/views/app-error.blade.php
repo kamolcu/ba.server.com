@@ -1,4 +1,4 @@
-@extends('layouts.default')
+@extends('layout.default')
 
 @section('title')
 {{ $title or 'Something is not right!' }} :: @parent
