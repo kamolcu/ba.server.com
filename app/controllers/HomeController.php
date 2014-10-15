@@ -13,7 +13,7 @@ class HomeController extends BaseController
     |   Route::get('/', 'HomeController@showWelcome');
     |
     */
-    public function frontPage($subdomain) {
+    public function frontPage($subdomain = 'funnel') {
         if (!Session::has('client')) {
             $client = new Google_Client();
             $client->setApplicationName("Funnel Application");
