@@ -13,7 +13,12 @@ class HomeController extends BaseController
     |   Route::get('/', 'HomeController@showWelcome');
     |
     */
-
+    public function  frontPage() {
+        return View::make('front');
+    }
+    public function compare() {
+        return 'compare ...';
+    }
     public function summaryView() {
         return View::make('report.summary');
     }

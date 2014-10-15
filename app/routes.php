@@ -35,8 +35,18 @@ Route::group(array(
 });
 
 Route::get('/', array(
-    'as' => 'welcome',
-    'uses' => 'HomeController@showWelcome'
+    'as' => 'front',
+    'uses' => 'HomeController@frontPage'
+));
+
+Route::any('/compare', array(
+    'as' => 'compare',
+    'uses' => 'HomeController@compare'
+));
+
+Route::get('summary', array(
+    'as' => 'summary',
+    'uses' => 'HomeController@summaryView'
 ));
 
 Route::get('/{a}', array(

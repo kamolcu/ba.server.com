@@ -82,6 +82,28 @@ textarea {
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
+
+.head {
+	margin: 20px 0 0 0;
+
+}
+
+.left-label {
+	padding-top: 7px;
+}
+
+.dl-horizontal dt{
+	width: 30%;
+}
+
+.dl-horizontal dd{
+	margin-left: 120px;
+}
+
+.date {
+	width: 100%;
+}
+
 @font-face {
 	font-family: 'arundinamono';
 	src: url('../fonts/arundinamono-webfont.eot') format('truetype');
@@ -144,7 +166,7 @@ textarea {
 
 .centering {
   	float:none;
-  	margin:0 auto;
+  	margin:10px auto;
 }
 
 .choice-container{
