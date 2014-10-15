@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Register The Laravel Class Loader
@@ -13,13 +12,11 @@
 
 ClassLoader::addDirectories(array(
 
-	app_path().'/commands',
-	app_path().'/controllers',
-	app_path().'/models',
-	app_path().'/database/seeds',
-
+    app_path() . '/commands',
+    app_path() . '/controllers',
+    app_path() . '/models',
+    app_path() . '/database/seeds',
 ));
-
 /*
 |--------------------------------------------------------------------------
 | Application Error Logger
@@ -30,12 +27,10 @@ ClassLoader::addDirectories(array(
 | build a basic log file setup which creates a single file for logs.
 |
 */
-
 //Log::useFiles(storage_path().'/logs/laravel.log');
-$logFile = 'log-'.php_sapi_name().'.txt';
+$logFile = 'log-' . php_sapi_name() . '.txt';
 
-Log::useDailyFiles(storage_path().'/logs/'.$logFile);
-
+Log::useDailyFiles(storage_path() . '/logs/' . $logFile);
 /*
 |--------------------------------------------------------------------------
 | Application Error Handler
@@ -49,16 +44,16 @@ Log::useDailyFiles(storage_path().'/logs/'.$logFile);
 |
 */
 
-App::error(function(Exception $exception, $code)
-{
-    if(strpos(Request::fullUrl(), 'http://ba-server.com/wiki') === false ||
-        strpos(Request::fullUrl(), 'http://ba-server.com/w') === false){
-        $msg = sprintf('Full URL = %s, code = %s', Request::fullUrl(), $code);
+App::error(function (Exception $exception, $code) {
+    if (strpos(Request::fullUrl() , 'http://ba-server.com/wiki') === false || strpos(Request::fullUrl() , 'http://ba-server.com/w') === false) {
+        $msg = sprintf('Full URL = %s, code = %s', Request::fullUrl() , $code);
         Log::error($msg);
         Log::error($exception);
     }
+    return Redirect::route('error.handler')->with(array(
+        'message' => $exception->getMessage()
+    ));
 });
-
 /*
 |--------------------------------------------------------------------------
 | Maintenance Mode Handler
@@ -70,11 +65,9 @@ App::error(function(Exception $exception, $code)
 |
 */
 
-App::down(function()
-{
-	return Response::make("Be right back!", 503);
+App::down(function () {
+    return Response::make("Be right back!", 503);
 });
-
 /*
 |--------------------------------------------------------------------------
 | Require The Filters File
@@ -86,5 +79,5 @@ App::down(function()
 |
 */
 
-require app_path().'/filters.php';
-require app_path().'/binded.php';
+require app_path() . '/filters.php';
+require app_path() . '/binded.php';

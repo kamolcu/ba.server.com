@@ -13,14 +13,14 @@ class HomeController extends BaseController
     |   Route::get('/', 'HomeController@showWelcome');
     |
     */
-    public function frontPage() {
+    public function frontPage($subdomain) {
         if (!Session::has('client')) {
             $client = new Google_Client();
             $client->setApplicationName("Funnel Application");
 
             $client->setClientId('137589562420-65fhcns4kqiu1o2rukbf37289tqunjet.apps.googleusercontent.com');
             $client->setClientSecret('pEmBCrl9AhmqSthR2I1qi1oH');
-            $client->setRedirectUri(URL::to('/') . '/oauth2callback');
+            $client->setRedirectUri(URL::to('front', $subdomain) . '/oauth2callback');
             //$client->setDeveloperKey('AIzaSyDGlZpsatv30xAitjk1U2Ra78zrTbbtzQs');
             $client->setScopes(array(
                 'https://www.googleapis.com/auth/analytics.readonly'
@@ -156,5 +156,9 @@ class HomeController extends BaseController
             Session::clear();
             return Redirect::to('/');
         }
+    }
+
+    public function errorView() {
+        return View::make('app-error');
     }
 }

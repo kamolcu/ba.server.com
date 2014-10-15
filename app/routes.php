@@ -39,6 +39,12 @@ Route::group(array(
     ));
 });
 
+
+Route::get('/something-is-not-right', array(
+    'as' => 'error.handler',
+    'uses' => 'HomeController@errorView'
+));
+
 Route::get('oauth2callback', array(
     'uses' => 'HomeController@oAuth'
 ));
