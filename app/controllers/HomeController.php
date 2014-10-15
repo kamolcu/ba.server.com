@@ -81,7 +81,7 @@ class HomeController extends BaseController
                 return Redirect::to('/');
             }
         }
-        return View::make('report.summary');
+        return Redirect::route('summary');
     }
     public function summaryView() {
         return View::make('report.summary');
