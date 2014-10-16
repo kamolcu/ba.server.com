@@ -6,33 +6,31 @@ class Helper
     // Not exceed 10 matrics
     public $matrixs = 'ga:sessions,ga:percentNewSessions,ga:newUsers,ga:bounceRate,ga:pageviewsPerSession,ga:avgSessionDuration,ga:transactions,ga:transactionRevenue,ga:transactionsPerSession';
     public $matrix_segment = 'ga:goal1Starts,ga:goal1Completions,ga:sessions';
-    public function isDeviceExists($name, $datasetId)
-    {
+    public function isDataSetFinished($startDate, $endDate) {
+        $result = FinishedDataset::where('start_date', '=', $startDate)->where('end_date', '=', $endDate)->first();
+        return !empty($result);
+    }
+    public function isDeviceExists($name, $datasetId) {
         $row = $this->getDevice($name, $datasetId);
         return !empty($row);
     }
-    public function getDevice($name, $datasetId)
-    {
+    public function getDevice($name, $datasetId) {
         $row = Device::whereName($name)->where('dataset_id', '=', $datasetId)->first();
         return $row;
     }
-    public function isSegmentExists($name, $datasetId)
-    {
+    public function isSegmentExists($name, $datasetId) {
         $row = $this->getSegment($name, $datasetId);
         return !empty($row);
     }
-    public function getSegment($name, $datasetId)
-    {
+    public function getSegment($name, $datasetId) {
         $row = GoalFunnel::whereName($name)->where('dataset_id', '=', $datasetId)->first();
         return $row;
     }
-    public function isLandingExists($name, $datasetId)
-    {
+    public function isLandingExists($name, $datasetId) {
         $row = $this->getLanding($name, $datasetId);
         return !empty($row);
     }
-    public function getLanding($name, $datasetId)
-    {
+    public function getLanding($name, $datasetId) {
         $row = Landing::whereName($name)->where('dataset_id', '=', $datasetId)->first();
         return $row;
     }
@@ -82,10 +80,9 @@ class Helper
         $sort = array(
             'sort' => '-ga:sessions'
         );
-        return $this->getGAData($analytics, $startDate, $endDate, $this->matrix_segment, $dim, $sort, array(), $segments);
+        return $this->getGAData($analytics, $startDate, $endDate, $this->matrix_segment, $dim, $sort, array() , $segments);
     }
-    public function getLandingData($analytics, $startDate, $endDate, $filters)
-    {
+    public function getLandingData($analytics, $startDate, $endDate, $filters) {
         $dim = array(
             'dimensions' => 'ga:landingPagePath'
         );
@@ -115,8 +112,7 @@ class Helper
         );
         return $this->getGAData($analytics, $startDate, $endDate, $this->matrixs, $dim, $sort);
     }
-    public function getDeviceData($analytics, $startDate, $endDate)
-    {
+    public function getDeviceData($analytics, $startDate, $endDate) {
         $dim = array(
             'dimensions' => 'ga:deviceCategory'
         );
