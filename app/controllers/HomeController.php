@@ -93,7 +93,7 @@ class HomeController extends BaseController
 
             $client->setClientId('137589562420-65fhcns4kqiu1o2rukbf37289tqunjet.apps.googleusercontent.com');
             $client->setClientSecret('pEmBCrl9AhmqSthR2I1qi1oH');
-            $client->setRedirectUri(URL::route('home', $subdomain) . '/oauth2callback');
+            $client->setRedirectUri(URL::to('/') . '/oauth2callback');
             //$client->setDeveloperKey('AIzaSyDGlZpsatv30xAitjk1U2Ra78zrTbbtzQs');
             $client->setScopes(array(
                 'https://www.googleapis.com/auth/analytics.readonly'
