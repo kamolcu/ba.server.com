@@ -47,45 +47,68 @@ class HomeController extends BaseController
 
         $msg = sprintf('Compare inputs = %s', print_r(Input::all() , true));
         Log::debug($msg);
-        // TODO: validation of date inputs
 
-        Session::put('main_start', Input::get('main_start'));
-        Session::put('main_end', Input::get('main_end'));
-        Session::put('history_start', Input::get('history_start'));
-        Session::put('history_end', Input::get('history_end'));
+        // TODO: validation of date inputs
+        $main_start = Input::get('main_start');
+        $main_end = Input::get('main_end');
+        $history_start = Input::get('history_start');
+        $history_end = Input::get('history_end');
+
+        Session::put('main_start', $main_start);
+        Session::put('main_end', $main_end);
+        Session::put('history_start', $history_start);
+        Session::put('history_end', $history_end);
 
         $client = unserialize(Session::get('client'));
         if (!empty($client) && $client->getAccessToken()) {
             try {
                 $analytics = new Google_Service_Analytics($client);
 
-                $finished = App::make('Helper')->isDataSetFinished(Input::get('main_start') , Input::get('main_end'));
+                $finished = App::make('Helper')->isDataSetFinished($main_start , $main_end);
                 if (!$finished) {
-                    $msg = sprintf('Process dataset %s to %s', Input::get('main_start') , Input::get('main_end'));
+                    $msg = sprintf('Process dataset %s to %s', $main_start , $main_end);
                     Log::debug($msg);
 
-                    App::make('DataManager')->loadData($analytics, Input::get('main_start') , Input::get('main_end'));
+                    App::make('DataManager')->loadData($analytics, $main_start , $main_end);
 
-                    $msg = sprintf('Finised dataset %s to %s', Input::get('main_start') , Input::get('main_end'));
+                    $msg = sprintf('Finised dataset %s to %s', $main_start , $main_end);
                     Log::debug($msg);
+
+                    $rules = array();
+                    $inputs = array(
+                        'name' => 'DataSet_' . $main_start . '_' . $main_end ,
+                        'start_date' => $main_start ,
+                        'end_date' => $main_end ,
+                    );
+                    App::make('Helper')->create('FinishedDataset', $inputs, $rules);
                 } else {
-                    $msg = sprintf('(Already done) Skip dataset %s to %s', Input::get('main_start') , Input::get('main_end'));
+                    $msg = sprintf('(Already done) Skip dataset %s to %s', $main_start , $main_end);
                     Log::debug($msg);
                 }
 
-                $finished = App::make('Helper')->isDataSetFinished(Input::get('history_start') , Input::get('history_end'));
+                $finished = App::make('Helper')->isDataSetFinished($history_start , $history_end);
                 if (!$finished) {
-                    $msg = sprintf('Process dataset %s to %s', Input::get('history_start') , Input::get('history_end'));
+                    $msg = sprintf('Process dataset %s to %s', $history_start , $history_end);
                     Log::debug($msg);
 
-                    App::make('DataManager')->loadData($analytics, Input::get('history_start') , Input::get('history_end'));
+                    App::make('DataManager')->loadData($analytics, $history_start , $history_end);
 
-                    $msg = sprintf('Finised dataset %s to %s', Input::get('history_start') , Input::get('history_end'));
+                    $msg = sprintf('Finised dataset %s to %s', $history_start , $history_end);
                     Log::debug($msg);
-                }else{
-                    $msg = sprintf('(Already done) Skip dataset %s to %s', Input::get('main_start') , Input::get('main_end'));
+
+                    $rules = array();
+                    $inputs = array(
+                        'name' => 'DataSet_' . $history_start . '_' . $history_end ,
+                        'start_date' => $history_start ,
+                        'end_date' => $history_end ,
+                    );
+                    App::make('Helper')->create('FinishedDataset', $inputs, $rules);
+                } else {
+                    $msg = sprintf('(Already done) Skip dataset %s to %s', $main_start , $main_end);
                     Log::debug($msg);
                 }
+
+                return Redirect::route('summary');
             }
             catch(Google_Auth_Exception $gx) {
                 Log::error($gx->getMessage());
@@ -93,7 +116,8 @@ class HomeController extends BaseController
                 return Redirect::to('/');
             }
         }
-        return Redirect::route('summary');
+        Session::clear();
+        return Redirect::to('/');
     }
     public function summaryView() {
         return View::make('report.summary');
