@@ -136,7 +136,7 @@ class HomeController extends BaseController
             catch(Google_Auth_Exception $gx) {
                 Log::error($gx->getMessage());
                 Session::clear();
-                return Redirect::to('/');
+                return Redirect::route('home');
             }
             // $result = $analytics->data_ga->get('ga:68738788', $startDate, $endDate, App::make('Helper')->matrixs, array(
             //     'dimensions' => 'ga:deviceCategory',
@@ -150,7 +150,7 @@ class HomeController extends BaseController
 
         } else {
             Session::clear();
-            return Redirect::to('/');
+            return Redirect::route('home');
         }
     }
 
