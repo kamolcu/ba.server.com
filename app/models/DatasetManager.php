@@ -29,7 +29,7 @@ class DatasetManager
 
             $rules = array();
             $inputs = array(
-                'name' => 'DataSet_' . $start . '_' . $main_end,
+                'name' => 'DataSet_' . $start . '_' . $end,
                 'start_date' => $start,
                 'end_date' => $end,
             );
