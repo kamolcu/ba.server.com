@@ -85,7 +85,7 @@ class HomeController extends BaseController
         return '';
     }
 
-    public function home($subdomain) {
+    public function home() {
         $client = null;
         if (!Session::has('client')) {
             $client = new Google_Client();
