@@ -3,8 +3,8 @@ class ChannelManager
 {
     const CHANNEL_NAME = 0;
     const SESSION = 1;
-    const BOUNCE_RATE = 4;
-    const TX = 7;
+    const BOUNCE_RATE = 2;
+    const TX = 3;
 
     public function updateData($row, $datasetId) {
         Log::debug('ChannelManager::UpdateData row = ' . print_r($row, true));

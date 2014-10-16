@@ -5,6 +5,7 @@ class Helper
 {
     // Not exceed 10 matrics
     public $matrix_device = 'ga:sessions,ga:bounceRate,ga:transactionsPerSession';
+    public $matrix_channels = 'ga:sessions,ga:bounceRate,ga:transactionsPerSession';
     public $matrixs = 'ga:sessions,ga:percentNewSessions,ga:newUsers,ga:bounceRate,ga:pageviewsPerSession,ga:avgSessionDuration,ga:transactions,ga:transactionRevenue,ga:transactionsPerSession';
     public $matrix_segment = 'ga:goal1Starts,ga:goal1Completions,ga:sessions';
     public function isDataSetFinished($startDate, $endDate) {
@@ -111,7 +112,7 @@ class Helper
         $sort = array(
             'sort' => '-ga:sessions'
         );
-        return $this->getGAData($analytics, $startDate, $endDate, $this->matrixs, $dim, $sort);
+        return $this->getGAData($analytics, $startDate, $endDate, $this->matrix_channels, $dim, $sort);
     }
     public function getDeviceData($analytics, $startDate, $endDate) {
         $dim = array(
