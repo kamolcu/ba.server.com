@@ -64,49 +64,8 @@ class HomeController extends BaseController
             try {
                 $analytics = new Google_Service_Analytics($client);
 
-                $finished = App::make('Helper')->isDataSetFinished($main_start , $main_end);
-                if (!$finished) {
-                    $msg = sprintf('Process dataset %s to %s', $main_start , $main_end);
-                    Log::debug($msg);
-
-                    App::make('DataManager')->loadData($analytics, $main_start , $main_end);
-
-                    $msg = sprintf('Finised dataset %s to %s', $main_start , $main_end);
-                    Log::debug($msg);
-
-                    $rules = array();
-                    $inputs = array(
-                        'name' => 'DataSet_' . $main_start . '_' . $main_end ,
-                        'start_date' => $main_start ,
-                        'end_date' => $main_end ,
-                    );
-                    App::make('Helper')->create('FinishedDataset', $inputs, $rules);
-                } else {
-                    $msg = sprintf('(Already done) Skip dataset %s to %s', $main_start , $main_end);
-                    Log::debug($msg);
-                }
-
-                $finished = App::make('Helper')->isDataSetFinished($history_start , $history_end);
-                if (!$finished) {
-                    $msg = sprintf('Process dataset %s to %s', $history_start , $history_end);
-                    Log::debug($msg);
-
-                    App::make('DataManager')->loadData($analytics, $history_start , $history_end);
-
-                    $msg = sprintf('Finised dataset %s to %s', $history_start , $history_end);
-                    Log::debug($msg);
-
-                    $rules = array();
-                    $inputs = array(
-                        'name' => 'DataSet_' . $history_start . '_' . $history_end ,
-                        'start_date' => $history_start ,
-                        'end_date' => $history_end ,
-                    );
-                    App::make('Helper')->create('FinishedDataset', $inputs, $rules);
-                } else {
-                    $msg = sprintf('(Already done) Skip dataset %s to %s', $main_start , $main_end);
-                    Log::debug($msg);
-                }
+                App::make('DatasetManager')->loadData($analytics, $main_start, $main_end);
+                App::make('DatasetManager')->loadData($analytics, $history_start, $history_end);
 
                 return Redirect::route('summary');
             }

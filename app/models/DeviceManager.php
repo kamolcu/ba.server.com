@@ -4,7 +4,7 @@ class DeviceManager
     const CHANNEL_NAME = 0;
     const SESSION = 1;
     const BOUNCE_RATE = 4;
-    const TX = 7;
+    const TX = 9;
 
     public function updateData($row, $datasetId) {
         Log::debug('DeviceManager::UpdateData row = ' . print_r($row, true));
