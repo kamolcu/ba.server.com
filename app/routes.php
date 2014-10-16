@@ -37,13 +37,12 @@ Route::group(array(
         'as' => 'compare',
         'uses' => 'HomeController@compare'
     ));
-
-    Route::any('home', array(
-        'as' => 'home',
-        'uses' => 'HomeController@home'
-    ));
 });
 
+Route::any('home', array(
+    'as' => 'home',
+    'uses' => 'HomeController@home'
+));
 
 Route::get('/something-is-not-right', array(
     'as' => 'error.handler',
