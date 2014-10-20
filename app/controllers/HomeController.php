@@ -67,6 +67,8 @@ class HomeController extends BaseController
                 App::make('DatasetManager')->loadData($analytics, $main_start, $main_end);
                 App::make('DatasetManager')->loadData($analytics, $history_start, $history_end);
 
+                App::make('Helper')->preLoad($main_start, $main_end, $history_start, $history_end);
+
                 return Redirect::route('summary');
             }
             catch(Google_Auth_Exception $gx) {

@@ -82,6 +82,24 @@ textarea {
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
+.device_name_left {
+	left: 150px;
+}
+.device_name_1 {
+	position: absolute;
+	top: 235px;
+	font-size: 20px;
+}
+.device_name_2 {
+	position: absolute;
+	top: 410px;
+	font-size: 20px;
+}
+.device_name_3 {
+	position: absolute;
+	top: 560px;
+	font-size: 20px;
+}
 
 .head {
 	margin: 20px 0 0 0;

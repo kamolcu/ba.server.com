@@ -8,6 +8,12 @@ class Helper
     public $matrix_channels = 'ga:sessions,ga:bounceRate,ga:transactionsPerSession';
     public $matrixs = 'ga:sessions,ga:percentNewSessions,ga:newUsers,ga:bounceRate,ga:pageviewsPerSession,ga:avgSessionDuration,ga:transactions,ga:transactionRevenue,ga:transactionsPerSession';
     public $matrix_segment = 'ga:goal1Starts,ga:goal1Completions,ga:sessions';
+    public function preLoad($start, $end, $historyStart, $historyEnd) {
+        $deviceDataSet = App::make('Helper')->getDataSet('Device', $start, $end);
+        $historyDeviceDataSet = App::make('Helper')->getDataSet('Device', $historyStart, $historyEnd);
+        Session::put('device_data_set_id', $deviceDataSet->id);
+        Session::put('history_device_data_set_id', $historyDeviceDataSet->id);
+    }
     public function isDataSetFinished($startDate, $endDate) {
         $result = FinishedDataset::where('start_date', '=', $startDate)->where('end_date', '=', $endDate)->first();
         return !empty($result);

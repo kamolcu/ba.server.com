@@ -21,4 +21,7 @@ class DeviceManager
             App::make('Helper')->create('Device', $inputs, $rules);
         }
     }
+    public function getDevicesList($datasetId) {
+        return Device::where('dataset_id', '=', $datasetId)->orderBy('sessions', 'desc')->get();
+    }
 }
