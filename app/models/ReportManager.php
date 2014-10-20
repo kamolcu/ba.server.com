@@ -9,13 +9,15 @@ class ReportManager
 
         $totalSessions = $this->getDeviceAllSessionsCount($start, $end);
         // Compare sessions
-        $change = App::make('StatsManager')->evalChange($main_result->sessions, $history_result->sessions);
+        $change = App::make('StatsManager')->evalChange($history_result->sessions, $main_result->sessions);
+
         $output = array(
             'sessions' => $main_result->sessions,
-            'bounce_rate' => $main_result->bounce_rate,
-            'conversion_rate' => $main_result->conversion_rate,
+            'bounce_rate' => App::make('Helper')->formatDecimal($main_result->bounce_rate),
+            'conversion_rate' => App::make('Helper')->formatDecimal($main_result->conversion_rate),
             'change' => $change
         );
+        s($main_result->sessions / $totalSessions);
         return $output;
     }
 
