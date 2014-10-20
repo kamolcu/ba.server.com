@@ -8,6 +8,8 @@ class ReportManager
         $history_result = Device::where('dataset_id', '=', $history->id)->whereName($device)->first();
 
         $totalSessions = $this->getDeviceAllSessionsCount($start, $end);
+        if(empty($totalSessions)) return array();
+
         // Compare sessions
         $change = App::make('StatsManager')->evalChange($history_result->sessions, $main_result->sessions);
 
@@ -15,9 +17,9 @@ class ReportManager
             'sessions' => $main_result->sessions,
             'bounce_rate' => App::make('Helper')->formatDecimal($main_result->bounce_rate),
             'conversion_rate' => App::make('Helper')->formatDecimal($main_result->conversion_rate),
-            'change' => $change
+            'change' => $change,
+            'percent' => App::make('Helper')->formatDecimal($main_result->sessions / $totalSessions * 100)
         );
-        s($main_result->sessions / $totalSessions);
         return $output;
     }
 
