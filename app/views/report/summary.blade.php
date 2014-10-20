@@ -11,22 +11,18 @@
         $results[$device->name] = App::make('ReportManager')->getDeviceStats($device->name, Session::get('main_start'), Session::get('main_end'), Session::get('history_start'), Session::get('history_end'));
     }
     $devices = (object)$results;
-    //sd($devices);
+    $total_device_sessions = App::make('ReportManager')->getDeviceAllSessionsCount(Session::get('main_start'), Session::get('main_end'));
 ?>
 @section('content')
     <div class="row text-center">
         <div class="col-xs-12 col-sm-12 col-md-12">
-            <img alt="funnel_bg" width="1105" height="800" src="{{ URL::to('/images/Funnel_bg.png') }}" />
+        <div class="img_container">
+            <img alt="funnel_bg" width="100%" src="{{ URL::to('/images/Funnel_bg.png') }}" />
+            <div class="device_name_desktop">{{ studly_case($devices->desktop['name']) }}</div>
+            <div class="device_name_left device_name_mobile">{{ studly_case($devices->mobile['name']) }}</div>
+            <div class="device_name_left device_name_tablet">{{ studly_case($devices->tablet['name']) }}</div>
+            <div class="total_device_sessions">{{ number_format($total_device_sessions, 0, '.', ',') }}</div>
 
-            <?php $counter = 0; ?>
-            @foreach($devices as $device)
-                <?php
-                    $counter++;
-                    $device = (object)$device;
-                ?>
-                <div class="device_name_left device_name_{{ $counter }}">{{ studly_case($device->name) }}</div>
-                <div class=""></div>
-            @endforeach
         </div>
     </div>
 @stop

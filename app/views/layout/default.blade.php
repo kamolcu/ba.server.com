@@ -29,13 +29,13 @@
     <link rel="shortcut icon" href="{{{ asset('favicon.ico') }}}" type="image/x-icon" />
 </head>
 
-<body>
+<body class="fixed">
 <!--[if lt IE 7]>
     <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
 <div class="container-fluid">
     <div class="row">
-        <div class="col-xs-12 col-md-8 col-md-offset-2">
+        <div class="col-xs-12 col-md-12">
             {{-- <div class="page-header text-center">
                 @section('header')
                     @include('partials.banner')
