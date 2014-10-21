@@ -13,6 +13,8 @@
     }
     $devices = (object)$results;
     $total_device_sessions = App::make('ReportManager')->getTotalSessions('Device', Session::get('device_data_set_id'));
+    $totalHistorySessions = App::make('ReportManager')->getTotalSessions('Device', Session::get('history_device_data_set_id'));
+    $LandingPageChange = App::make('StatsManager')->evalChange($totalHistorySessions, $total_device_sessions);
 
     $channels = App::make('ReportManager')->getChannelStats();
     $total_channels = App::make('ReportManager')->getTotalSessions('Channel', Session::get('channel_data_set_id'));
@@ -95,6 +97,18 @@
             {{-- Channel End --}}
 
             {{-- Landing --}}
+            <?php
+                $sign = '';
+            ?>
+            <div class="landing_page_sessions">{{ App::make('Helper')->formatInteger($total_device_sessions) }}</div>
+            @if($LandingPageChange['momentum'] == 1)
+                <?php $sign = 'up'; ?>
+                <img class="landing_page_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
+            @elseif($LandingPageChange['momentum'] == -1)
+                <?php $sign = 'down'; ?>
+                <img class="up_side_down landing_page_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
+            @endif
+            <div class="landing_page_change {{ $sign }}">{{ App::make('Helper')->formatPercent($LandingPageChange['percent']) }}</div>
             {{-- Landing End --}}
 
             {{-- Product --}}

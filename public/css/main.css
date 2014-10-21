@@ -85,6 +85,22 @@ textarea {
 .report_header{
 	font-size: 22px;
 }
+.landing_page_sessions {
+	position: absolute;
+	left: 391px;
+	top: 366px;
+	font-size: 18px;
+}
+.landing_page_sign {
+	position: absolute;
+	left: 390px;
+	top: 391px;
+}
+.landing_page_change {
+	position: absolute;
+	left: 405px;
+	top: 389px;
+}
 .up_side_down {
 	-ms-transform: rotate(180deg); /* IE 9 */
     -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
