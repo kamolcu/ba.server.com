@@ -175,4 +175,7 @@ class Helper
     public function formatPercent($input) {
         return $this->padSpace(($this->formatDecimal($input)), 5) . '%';
     }
+    public function test($input) {
+        return '&nbsp;' . $input;
+    }
 }

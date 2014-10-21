@@ -100,8 +100,14 @@ textarea {
 .up {
 	color: green;
 }
+.up:before {
+	content: '+';
+}
 .down {
 	color: red;
+}
+.down:before {
+	content: '-';
 }
 .total_device_sessions {
 	position: absolute;

@@ -43,9 +43,9 @@
                 <?php $tablet_sign = 'down'; ?>
                 <img class="up_side_down tablet_sign" alt="down" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
             @endif
-            <div class="desktop_percent_change {{ $desktop_sign }}">{{ App::make('Helper')->formatDecimal($devices->desktop['change']['momentum'] * $devices->desktop['change']['percent']) }}</div>
-            <div class="mobile_percent_change {{ $mobile_sign }}">{{ App::make('Helper')->formatDecimal($devices->mobile['change']['momentum'] * $devices->mobile['change']['percent']) }}</div>
-            <div class="tablet_percent_change {{ $tablet_sign }}">{{ App::make('Helper')->formatDecimal($devices->tablet['change']['momentum'] * $devices->tablet['change']['percent']) }}</div>
+            <div class="desktop_percent_change {{ $desktop_sign }}">{{ App::make('Helper')->formatPercent($devices->desktop['change']['percent']) }}</div>
+            <div class="mobile_percent_change {{ $mobile_sign }}">{{ App::make('Helper')->formatPercent($devices->mobile['change']['percent']) }}</div>
+            <div class="tablet_percent_change {{ $tablet_sign }}">{{ App::make('Helper')->formatPercent($devices->tablet['change']['percent']) }}</div>
 
             <div class="desktop_sessions">{{ App::make('Helper')->formatInteger($devices->desktop['sessions']) }}</div>
             <div class="mobile_sessions">{{ App::make('Helper')->formatInteger($devices->mobile['sessions']) }}</div>
@@ -62,6 +62,8 @@
             <div class="desktop_conv">{{ App::make('Helper')->formatPercent($devices->desktop['conversion_rate']) }}</div>
             <div class="mobile_conv">{{ App::make('Helper')->formatPercent($devices->mobile['conversion_rate']) }}</div>
             <div class="tablet_conv">{{ App::make('Helper')->formatPercent($devices->tablet['conversion_rate']) }}</div>
+
+            <div class="">{{ App::make('Helper')->test($devices->tablet['conversion_rate']) }}</div>
 
 
         </div>
