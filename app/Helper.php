@@ -15,12 +15,15 @@ class Helper
         $historyChannelDataSet = App::make('Helper')->getDataSet('Channels', $historyStart, $historyEnd);
         $otherChannelDataset = App::make('Helper')->getDataSet('Other Channels', $start, $end);
         $historyOtherChannelDataSet = App::make('Helper')->getDataSet('Other Channels', $historyStart, $historyEnd);
-
+        $product = App::make('Helper')->getDataSet('Landing Product', $start, $end);
+        $history_product = App::make('Helper')->getDataSet('Landing Product', $historyStart, $historyEnd);
         Session::put('main_start', $start);
         Session::put('main_end', $end);
         Session::put('history_start', $historyStart);
         Session::put('history_end', $historyEnd);
 
+        Session::put('product_data_set_id', $product->id);
+        Session::put('history_product_data_set_id', $history_product->id);
         Session::put('device_data_set_id', $deviceDataSet->id);
         Session::put('history_device_data_set_id', $historyDeviceDataSet->id);
         Session::put('channel_data_set_id', $channelDataset->id);

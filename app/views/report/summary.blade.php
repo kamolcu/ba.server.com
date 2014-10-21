@@ -18,6 +18,12 @@
 
     $channels = App::make('ReportManager')->getChannelStats();
     $total_channels = App::make('ReportManager')->getTotalSessions('Channel', Session::get('channel_data_set_id'));
+
+    $product_sessions = App::make('ReportManager')->getTotalSessions('Landing', Session::get('product_data_set_id'));
+    $history_product_sessions = App::make('ReportManager')->getTotalSessions('Landing', Session::get('history_product_data_set_id'));
+    $productPageChange = App::make('StatsManager')->evalChange($history_product_sessions, $product_sessions);
+    // Session::put('product_data_set_id', $product->id);
+    // Session::put('history_product_data_set_id', $history_product->id);
 ?>
 @section('content')
     <div class="row text-center">
@@ -112,6 +118,15 @@
             {{-- Landing End --}}
 
             {{-- Product --}}
+            <div class="product_page_sessions">{{ App::make('Helper')->formatInteger($product_sessions) }}</div>
+            @if($productPageChange['momentum'] == 1)
+                <?php $sign = 'up'; ?>
+                <img class="product_page_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
+            @elseif($productPageChange['momentum'] == -1)
+                <?php $sign = 'down'; ?>
+                <img class="up_side_down product_page_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
+            @endif
+            <div class="product_page_change {{ $sign }}">{{ App::make('Helper')->formatPercent($productPageChange['percent']) }}</div>
             {{-- Product End --}}
 
             {{-- Checkout --}}
