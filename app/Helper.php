@@ -169,4 +169,10 @@ class Helper
     public function formatInteger($value, $comma = ',') {
         return number_format($value, 0, '.', $comma);
     }
+    public function padSpace($input, $length) {
+        return str_pad($input, $length, '0', STR_PAD_LEFT);
+    }
+    public function formatPercent($input) {
+        return $this->padSpace(($this->formatDecimal($input)), 5) . '%';
+    }
 }

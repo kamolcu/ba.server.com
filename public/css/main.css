@@ -142,6 +142,18 @@ textarea {
 	font-size: 14px;
 	font-weight: bold;
 }
+.desktop_bounce{
+	position: absolute;
+	left: 140px;
+	top: 277px;
+	font-size: 14px;
+}
+.desktop_conv {
+	position: absolute;
+	left: 140px;
+	top: 296px;
+	font-size: 14px;
+}
 .device_name_mobile {
 	position: absolute;
 	top: 367px;
@@ -171,6 +183,18 @@ textarea {
 	font-size: 14px;
 	font-weight: bold;
 }
+.mobile_bounce{
+	position: absolute;
+	left: 140px;
+	top: 426px;
+	font-size: 14px;
+}
+.mobile_conv{
+	position: absolute;
+	left: 140px;
+	top: 445px;
+	font-size: 14px;
+}
 .device_name_tablet {
 	position: absolute;
 	top: 505px;
@@ -193,7 +217,25 @@ textarea {
 	left: 0px;
 	top: 528px;
 }
-
+.tablet_percent{
+	position: absolute;
+	left: 140px;
+	top: 546px;
+	font-size: 14px;
+	font-weight: bold;
+}
+.tablet_bounce{
+	position: absolute;
+	left: 140px;
+	top: 564px;
+	font-size: 14px;
+}
+.tablet_conv{
+	position: absolute;
+	left: 140px;
+	top: 583px;
+	font-size: 14px;
+}
 .head {
 	margin: 20px 0 0 0;
 
