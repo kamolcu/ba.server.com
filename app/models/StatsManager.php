@@ -22,4 +22,16 @@ class StatsManager
         $result['percent'] = $this->getPercentChange($val1, $val2);
         return $result;
     }
+    public function evalChangePercent($percent1, $percent2) {
+        $result = array();
+        if ($percent1 == $percent2) {
+            $result['momentum'] = 0;
+        } elseif ($percent1 < $percent2) {
+            $result['momentum'] = 1;
+        } else {
+            $result['momentum'] = - 1;
+        }
+        $result['diff'] = abs($percent1 - $percent2);
+        return $result;
+    }
 }

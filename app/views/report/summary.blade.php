@@ -27,6 +27,19 @@
     $checkout = App::make('ReportManager')->getSessions('GoalFunnel', 'Login',Session::get('product_funnel_id'));
     $history_checkout = App::make('ReportManager')->getSessions('GoalFunnel', 'Login',Session::get('history_product_funnel_id'));
     $checkoutChange = App::make('StatsManager')->evalChange($history_checkout, $checkout);
+
+    $landing_conversion = App::make('StatsManager')->getConversionRate($total_device_sessions, $product_sessions);
+
+    $history_landing_conversion = App::make('StatsManager')->getConversionRate($totalHistorySessions, $history_product_sessions);
+    $landing_conversion_change = App::make('StatsManager')->evalChangePercent($history_landing_conversion, $landing_conversion);
+
+    $checkout_conversion = App::make('StatsManager')->getConversionRate($total_device_sessions, $checkout);
+    $history_checkout_conversion = App::make('StatsManager')->getConversionRate($totalHistorySessions, $history_checkout);
+    $checkout_conversion_change = App::make('StatsManager')->evalChangePercent($history_checkout_conversion, $checkout_conversion);
+
+    $cart_abandon = App::make('StatsManager')->evalChange($product_sessions, $checkout);
+    $history_cart_abandon = App::make('StatsManager')->evalChange($history_product_sessions, $history_checkout);
+    $cart_abandon_change = App::make('StatsManager')->evalChangePercent($history_cart_abandon['percent'], $cart_abandon['percent']);
 ?>
 @section('content')
     <div class="row text-center">
@@ -110,6 +123,7 @@
                 $sign = '';
             ?>
             <div class="landing_page_sessions">{{ App::make('Helper')->formatInteger($total_device_sessions) }}</div>
+            <div class="landing_conversion">{{ App::make('Helper')->formatPercent($landing_conversion) }}</div>
             @if($LandingPageChange['momentum'] == 1)
                 <?php $sign = 'up'; ?>
                 <img class="landing_page_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
@@ -130,9 +144,24 @@
                 <img class="up_side_down product_page_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
             @endif
             <div class="product_page_change {{ $sign }}">{{ App::make('Helper')->formatPercent($productPageChange['percent']) }}</div>
+
+            <?php
+                $sign = '';
+            ?>
+            @if($landing_conversion_change['momentum'] == 1)
+                <?php $sign = 'up'; ?>
+                <img class="landing_conv_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
+            @elseif($landing_conversion_change['momentum'] == -1)
+                <?php $sign = 'down'; ?>
+                <img class="up_side_down landing_conv_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
+            @endif
+            <div class="landing_conv_change {{ $sign }}">{{ App::make('Helper')->formatPercent($landing_conversion_change['diff']) }}</div>
             {{-- Product End --}}
 
             {{-- Checkout --}}
+            <?php
+                $sign = '';
+            ?>
             <div class="checkout_sessions">{{ App::make('Helper')->formatInteger($checkout) }}</div>
             @if($checkoutChange['momentum'] == 1)
                 <?php $sign = 'up'; ?>
@@ -142,6 +171,34 @@
                 <img class="up_side_down checkout_page_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
             @endif
             <div class="checkout_page_change {{ $sign }}">{{ App::make('Helper')->formatPercent($checkoutChange['percent']) }}</div>
+
+
+            <?php
+                $sign = '';
+            ?>
+            <div class="checkout_conversion">{{ App::make('Helper')->formatPercent($checkout_conversion) }}</div>
+            <div class="cart_abandon_rate">{{ App::make('Helper')->formatPercent($cart_abandon['percent']) }}</div>
+            @if($checkout_conversion_change['momentum'] == 1)
+                <?php $sign = 'up'; ?>
+                <img class="checkout_conv_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
+            @elseif($checkout_conversion_change['momentum'] == -1)
+                <?php $sign = 'down'; ?>
+                <img class="up_side_down checkout_conv_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
+            @endif
+            <div class="checkout_conv_change {{ $sign }}">{{ App::make('Helper')->formatPercent($checkout_conversion_change['diff']) }}</div>
+
+            <?php
+                $sign = '';
+            ?>
+            @if($cart_abandon_change['momentum'] == 1)
+                <?php $sign = 'up_bad'; ?>
+                <img class="cart_aban_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png.png') }}">
+            @elseif($cart_abandon_change['momentum'] == -1)
+                <?php $sign = 'down_good'; ?>
+                <img class="up_side_down cart_aban_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
+            @endif
+            <div class="cart_aban_change {{ $sign }}">{{ App::make('Helper')->formatPercent($cart_abandon_change['diff']) }}</div>
+
             {{-- Checkout End --}}
 
             {{-- Completed Orders --}}

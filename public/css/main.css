@@ -85,6 +85,21 @@ textarea {
 .report_header{
 	font-size: 22px;
 }
+.landing_conv_sign {
+	position: absolute;
+	left: 534px;
+	top: 582px;
+}
+.landing_conv_change {
+	position: absolute;
+	left: 545px;
+	top: 582px;
+}
+.landing_conversion {
+	position: absolute;
+	left: 479px;
+	top: 582px;
+}
 .landing_page_sessions {
 	position: absolute;
 	left: 391px;
@@ -133,6 +148,38 @@ textarea {
 	left: 657px;
 	top: 400px;
 }
+.checkout_conv_sign {
+	position: absolute;
+	left: 670px;
+	top: 620px;
+}
+.checkout_conv_change {
+	position: absolute;
+	left: 680px;
+	top: 620px;
+}
+.checkout_conversion {
+	position: absolute;
+	left: 613px;
+	top: 620px;
+}
+.cart_abandon_rate {
+	position: absolute;
+	left: 617px;
+	top: 524px;
+	font-size: 12px;
+}
+.cart_aban_sign {
+	position: absolute;
+	left: 667px;
+	top: 524px;
+}
+.cart_aban_change {
+	position: absolute;
+	left: 679px;
+	top: 524px;
+	font-size: 12px;
+}
 .up_side_down {
 	-ms-transform: rotate(180deg); /* IE 9 */
     -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
@@ -147,16 +194,16 @@ textarea {
 	width: 1000px;
 	position: relative;
 }
-.up {
+.up, .down_good {
 	color: green;
 }
-.up:before {
+.up:before, .up_bad:before {
 	content: '+';
 }
-.down {
+.down, .up_bad {
 	color: red;
 }
-.down:before {
+.down:before, .down_good:before {
 	content: '-';
 }
 .total_device_sessions {
