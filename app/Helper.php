@@ -11,8 +11,16 @@ class Helper
     public function preLoad($start, $end, $historyStart, $historyEnd) {
         $deviceDataSet = App::make('Helper')->getDataSet('Device', $start, $end);
         $historyDeviceDataSet = App::make('Helper')->getDataSet('Device', $historyStart, $historyEnd);
+        $channelDataset = App::make('Helper')->getDataSet('Channels', $start, $end);
+        $historyChannelDataSet = App::make('Helper')->getDataSet('Channels', $historyStart, $historyEnd);
+        $otherChannelDataset = App::make('Helper')->getDataSet('Other Channels', $start, $end);
+        $historyOtherChannelDataSet = App::make('Helper')->getDataSet('Other Channels', $historyStart, $historyEnd);
         Session::put('device_data_set_id', $deviceDataSet->id);
         Session::put('history_device_data_set_id', $historyDeviceDataSet->id);
+        Session::put('channel_data_set_id', $channelDataset->id);
+        Session::put('history_channel_data_set_id', $historyChannelDataSet->id);
+        Session::put('channel_other_data_set_id', $otherChannelDataset->id);
+        Session::put('history_other_channel_data_set_id', $historyOtherChannelDataSet->id);
     }
     public function isDataSetFinished($startDate, $endDate) {
         $result = FinishedDataset::where('start_date', '=', $startDate)->where('end_date', '=', $endDate)->first();

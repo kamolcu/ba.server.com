@@ -8,16 +8,21 @@
     $devices = App::make('DeviceManager')->getDevicesList(Session::get('device_data_set_id'));
     $results = array();
     foreach($devices as $device){
-        $results[$device->name] = App::make('ReportManager')->getDeviceStats($device->name, Session::get('main_start'), Session::get('main_end'), Session::get('history_start'), Session::get('history_end'));
+        $results[$device->name] = App::make('ReportManager')->getDeviceStats($device->name);
     }
     $devices = (object)$results;
-    $total_device_sessions = App::make('ReportManager')->getDeviceAllSessionsCount(Session::get('main_start'), Session::get('main_end'));
+    $total_device_sessions = App::make('ReportManager')->getTotalSessions('Device', Session::get('device_data_set_id'));
+
+    $channels = App::make('ReportManager')->getChannelStats();
+    $total_channels = App::make('ReportManager')->getTotalSessions('Channel', Session::get('channel_data_set_id'));
 ?>
 @section('content')
     <div class="row text-center">
         <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="img_container">
             <img alt="funnel_bg" width="100%" src="{{ URL::to('/images/Funnel_bg.png') }}" />
+
+            {{-- Device --}}
             <div class="device_name_desktop">{{ studly_case($devices->desktop['name']) }}</div>
             <div class="device_name_left device_name_mobile">{{ studly_case($devices->mobile['name']) }}</div>
             <div class="device_name_left device_name_tablet">{{ studly_case($devices->tablet['name']) }}</div>
@@ -62,9 +67,45 @@
             <div class="desktop_conv">{{ App::make('Helper')->formatPercent($devices->desktop['conversion_rate']) }}</div>
             <div class="mobile_conv">{{ App::make('Helper')->formatPercent($devices->mobile['conversion_rate']) }}</div>
             <div class="tablet_conv">{{ App::make('Helper')->formatPercent($devices->tablet['conversion_rate']) }}</div>
+            {{-- Device End --}}
 
-            <div class="">{{ App::make('Helper')->test($devices->tablet['conversion_rate']) }}</div>
+            {{-- Channel --}}
+            <?php
+                $index = 0;
+                $sign = '';
+            ?>
+            @foreach($channels as $channel)
+            <?php $channel = (object)$channel; ?>
+                <div class="channel_name_{{ $index }}">{{ $channel->name }}</div>
+                <div class="channel_sessions_percent_{{ $index }}">{{ '('.App::make('Helper')->formatPercent($channel->sessions / $total_channels * 100).')' }}</div>
+                <div class="channel_sessions_{{ $index }}">{{ App::make('Helper')->formatInteger($channel->sessions) }}</div>
+                @if(property_exists($channel, 'change') && $channel->change['momentum'] == 1)
+                    <?php $sign = 'up'; ?>
+                    <img class="channel_sign_{{ $index }}" alt="{{ $sign }}" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
+                    <div class="channel_change_{{ $index }} {{ $sign }}" >{{ $channel->change['percent'] }}</div>
+                @elseif(property_exists($channel, 'change') && $channel->change['momentum'] == -1)
+                    <?php $sign = 'down'; ?>
+                    <img class="up_side_down channel_sign_{{ $index }}" alt="{{ $sign }}" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
+                    <div class="channel_change_{{ $index }} {{ $sign }}" >{{ $channel->change['percent'] }}</div>
+                @endif
+            <?php $index++; ?>
+            @endforeach
+            {{-- Channel End --}}
 
+            {{-- Landing --}}
+            {{-- Landing End --}}
+
+            {{-- Product --}}
+            {{-- Product End --}}
+
+            {{-- Checkout --}}
+            {{-- Checkout End --}}
+
+            {{-- Completed Orders --}}
+            {{-- Completed Orders End --}}
+
+            {{-- Paid Orders --}}
+            {{-- Paid Orders End --}}
 
         </div>
     </div>
