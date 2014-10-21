@@ -17,11 +17,17 @@ class Helper
         $historyOtherChannelDataSet = App::make('Helper')->getDataSet('Other Channels', $historyStart, $historyEnd);
         $product = App::make('Helper')->getDataSet('Landing Product', $start, $end);
         $history_product = App::make('Helper')->getDataSet('Landing Product', $historyStart, $historyEnd);
+
+        $funnel = App::make('Helper')->getDataSet('Segment', $start, $end);
+        $history_funnel = App::make('Helper')->getDataSet('Segment', $historyStart, $historyEnd);
+
         Session::put('main_start', $start);
         Session::put('main_end', $end);
         Session::put('history_start', $historyStart);
         Session::put('history_end', $historyEnd);
 
+        Session::put('product_funnel_id', $funnel->id);
+        Session::put('history_product_funnel_id', $history_funnel->id);
         Session::put('product_data_set_id', $product->id);
         Session::put('history_product_data_set_id', $history_product->id);
         Session::put('device_data_set_id', $deviceDataSet->id);

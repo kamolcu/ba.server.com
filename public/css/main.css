@@ -117,6 +117,22 @@ textarea {
 	left: 537px;
 	top: 400px;
 }
+.checkout_sessions {
+	position: absolute;
+	left: 656px;
+	top: 375px;
+	font-size: 18px;
+}
+.checkout_page_sign {
+	position: absolute;
+	left: 644px;
+	top: 400px;
+}
+.checkout_page_change {
+	position: absolute;
+	left: 657px;
+	top: 400px;
+}
 .up_side_down {
 	-ms-transform: rotate(180deg); /* IE 9 */
     -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */

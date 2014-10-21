@@ -19,11 +19,14 @@
     $channels = App::make('ReportManager')->getChannelStats();
     $total_channels = App::make('ReportManager')->getTotalSessions('Channel', Session::get('channel_data_set_id'));
 
-    $product_sessions = App::make('ReportManager')->getTotalSessions('Landing', Session::get('product_data_set_id'));
-    $history_product_sessions = App::make('ReportManager')->getTotalSessions('Landing', Session::get('history_product_data_set_id'));
+    $product_sessions = App::make('ReportManager')->getSessions('GoalFunnel', 'Product Detail',Session::get('product_funnel_id'));
+    $history_product_sessions = App::make('ReportManager')->getSessions('GoalFunnel', 'Product Detail',Session::get('history_product_funnel_id'));
     $productPageChange = App::make('StatsManager')->evalChange($history_product_sessions, $product_sessions);
     // Session::put('product_data_set_id', $product->id);
     // Session::put('history_product_data_set_id', $history_product->id);
+    $checkout = App::make('ReportManager')->getSessions('GoalFunnel', 'Login',Session::get('product_funnel_id'));
+    $history_checkout = App::make('ReportManager')->getSessions('GoalFunnel', 'Login',Session::get('history_product_funnel_id'));
+    $checkoutChange = App::make('StatsManager')->evalChange($history_checkout, $checkout);
 ?>
 @section('content')
     <div class="row text-center">
@@ -130,6 +133,15 @@
             {{-- Product End --}}
 
             {{-- Checkout --}}
+            <div class="checkout_sessions">{{ App::make('Helper')->formatInteger($checkout) }}</div>
+            @if($checkoutChange['momentum'] == 1)
+                <?php $sign = 'up'; ?>
+                <img class="checkout_page_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
+            @elseif($checkoutChange['momentum'] == -1)
+                <?php $sign = 'down'; ?>
+                <img class="up_side_down checkout_page_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
+            @endif
+            <div class="checkout_page_change {{ $sign }}">{{ App::make('Helper')->formatPercent($checkoutChange['percent']) }}</div>
             {{-- Checkout End --}}
 
             {{-- Completed Orders --}}

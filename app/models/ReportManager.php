@@ -97,6 +97,10 @@ class ReportManager
         }
         return $output;
     }
+
+    public function getSessions($modelName, $name,$dataset_id) {
+        return $modelName::where('dataset_id', '=', $dataset_id)->whereName($name)->sum('sessions');
+    }
     public function getTotalSessions($modelName, $dataset_id) {
         return $modelName::where('dataset_id', '=', $dataset_id)->sum('sessions');
     }
