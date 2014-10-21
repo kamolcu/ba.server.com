@@ -1,4 +1,5 @@
 <?php
+use \Carbon\Carbon;
 class ReportManager
 {
     public function getDeviceStats($device) {
@@ -83,9 +84,9 @@ class ReportManager
         $hhOutput = $hhOutput->sortByDesc('sessions');
         // compare
         $counter = 0;
-        foreach($output as $oo){
-            foreach($hhOutput as $hh){
-                if($oo['name'] == $hh['name']){
+        foreach ($output as $oo) {
+            foreach ($hhOutput as $hh) {
+                if ($oo['name'] == $hh['name']) {
                     // calculate change
                     $change = App::make('StatsManager')->evalChange($hh['sessions'], $oo['sessions']);
                     $oo['change'] = $change;
@@ -98,5 +99,13 @@ class ReportManager
     }
     public function getTotalSessions($modelName, $dataset_id) {
         return $modelName::where('dataset_id', '=', $dataset_id)->sum('sessions');
+    }
+    public function getReportHeader() {
+        Carbon::setToStringFormat('d M Y');
+        $start = new Carbon(Session::get('main_start'));
+        $end = new Carbon(Session::get('main_end'));
+        $history = new Carbon(Session::get('history_start'));
+        $historyEnd = new Carbon(Session::get('history_end'));
+        return sprintf('As of Period %s to %s compare with period %s to %s', $start, $end, $history, $historyEnd);
     }
 }

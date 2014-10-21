@@ -5,6 +5,7 @@
     //     Session::put('main_end', $main_end);
     //     Session::put('history_start', $history_start);
     //     Session::put('history_end', $history_end);
+    $header = App::make('ReportManager')->getReportHeader();
     $devices = App::make('DeviceManager')->getDevicesList(Session::get('device_data_set_id'));
     $results = array();
     foreach($devices as $device){
@@ -19,6 +20,7 @@
 @section('content')
     <div class="row text-center">
         <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="report_header">{{$header}}</div>
         <div class="img_container">
             <img alt="funnel_bg" width="100%" src="{{ URL::to('/images/Funnel_bg.png') }}" />
 

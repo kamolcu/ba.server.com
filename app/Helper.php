@@ -15,6 +15,12 @@ class Helper
         $historyChannelDataSet = App::make('Helper')->getDataSet('Channels', $historyStart, $historyEnd);
         $otherChannelDataset = App::make('Helper')->getDataSet('Other Channels', $start, $end);
         $historyOtherChannelDataSet = App::make('Helper')->getDataSet('Other Channels', $historyStart, $historyEnd);
+
+        Session::put('main_start', $start);
+        Session::put('main_end', $end);
+        Session::put('history_start', $historyStart);
+        Session::put('history_end', $historyEnd);
+
         Session::put('device_data_set_id', $deviceDataSet->id);
         Session::put('history_device_data_set_id', $historyDeviceDataSet->id);
         Session::put('channel_data_set_id', $channelDataset->id);
@@ -181,7 +187,7 @@ class Helper
         return str_pad($input, $length, '0', STR_PAD_LEFT);
     }
     public function formatPercent($input) {
-        return $this->padSpace(($this->formatDecimal($input)), 5) . '%';
+        return $this->padSpace(($this->formatDecimal($input)) , 5) . '%';
     }
     public function test($input) {
         return '&nbsp;' . $input;

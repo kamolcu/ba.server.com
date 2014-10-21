@@ -82,7 +82,9 @@ textarea {
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
-
+.report_header{
+	font-size: 22px;
+}
 .up_side_down {
 	-ms-transform: rotate(180deg); /* IE 9 */
     -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
