@@ -166,4 +166,7 @@ class Helper
     public function formatDecimal($value, $comma = ',') {
         return number_format($value, 2, '.', $comma);
     }
+    public function formatInteger($value, $comma = ',') {
+        return number_format($value, 0, '.', $comma);
+    }
 }

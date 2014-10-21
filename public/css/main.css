@@ -82,6 +82,12 @@ textarea {
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
+
+.up_side_down {
+	-ms-transform: rotate(180deg); /* IE 9 */
+    -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
+    transform: rotate(180deg);
+}
 .fixed {
 	max-width: 1000px;
 	width: 1000px;
@@ -90,6 +96,12 @@ textarea {
 .img_container {
 	width: 1000px;
 	position: relative;
+}
+.up {
+	color: green;
+}
+.down {
+	color: red;
 }
 .total_device_sessions {
 	position: absolute;
@@ -106,15 +118,80 @@ textarea {
 	top: 210px;
 	font-size: 20px;
 }
+.desktop_sessions {
+	position: absolute;
+	left: 80px;
+	top: 232px;
+	font-size: 14px;
+}
+.desktop_percent_change {
+	position: absolute;
+	left: 15px;
+	top: 232px;
+	font-size: 14px;
+}
+.desktop_sign{
+	position: absolute;
+	left: 0px;
+	top: 235px;
+}
+.desktop_percent{
+	position: absolute;
+	left: 140px;
+	top: 259px;
+	font-size: 14px;
+	font-weight: bold;
+}
 .device_name_mobile {
 	position: absolute;
 	top: 367px;
 	font-size: 20px;
 }
+.mobile_sessions {
+	position: absolute;
+	left: 80px;
+	top: 388px;
+	font-size: 14px;
+}
+.mobile_percent_change {
+	position: absolute;
+	left: 15px;
+	top: 388px;
+	font-size: 14px;
+}
+.mobile_sign{
+	position: absolute;
+	left: 0px;
+	top: 388px;
+}
+.mobile_percent{
+	position: absolute;
+	left: 140px;
+	top: 408px;
+	font-size: 14px;
+	font-weight: bold;
+}
 .device_name_tablet {
 	position: absolute;
 	top: 505px;
 	font-size: 20px;
+}
+.tablet_sessions {
+	position: absolute;
+	left: 80px;
+	top: 526px;
+	font-size: 14px;
+}
+.tablet_percent_change {
+	position: absolute;
+	left: 15px;
+	top: 526px;
+	font-size: 14px;
+}
+.tablet_sign{
+	position: absolute;
+	left: 0px;
+	top: 528px;
 }
 
 .head {
