@@ -8,6 +8,14 @@ class Helper
     public $matrix_channels = 'ga:sessions,ga:bounceRate,ga:transactionsPerSession';
     public $matrixs = 'ga:sessions,ga:percentNewSessions,ga:newUsers,ga:bounceRate,ga:pageviewsPerSession,ga:avgSessionDuration,ga:transactions,ga:transactionRevenue,ga:transactionsPerSession';
     public $matrix_segment = 'ga:goal1Starts,ga:goal1Completions,ga:sessions';
+    public $landing_list = array(
+        'Landing Product',
+        'Landing Line',
+        'Landing Direct',
+        'Landing Category',
+        'Landing Search',
+        'Landing Everyday-wow',
+    );
     public function preLoad($start, $end, $historyStart, $historyEnd) {
         $deviceDataSet = App::make('Helper')->getDataSet('Device', $start, $end);
         $historyDeviceDataSet = App::make('Helper')->getDataSet('Device', $historyStart, $historyEnd);
@@ -20,6 +28,13 @@ class Helper
 
         $funnel = App::make('Helper')->getDataSet('Segment', $start, $end);
         $history_funnel = App::make('Helper')->getDataSet('Segment', $historyStart, $historyEnd);
+
+        foreach($this->landing_list as $list){
+            $landing = App::make('Helper')->getDataSet($list, $start, $end);
+            $history_landing = App::make('Helper')->getDataSet($list, $historyStart, $historyEnd);
+            Session::put($list, $landing->id);
+            Session::put('history_'.$list, $history_landing->id);
+        }
 
         Session::put('main_start', $start);
         Session::put('main_end', $end);

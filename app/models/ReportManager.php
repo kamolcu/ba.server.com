@@ -2,6 +2,48 @@
 use \Carbon\Carbon;
 class ReportManager
 {
+    public function getLandingStats() {
+        $output = new Illuminate\Support\Collection();
+        $sum = 0;
+        $history_sum = 0;
+        $totalSessions = 0;
+        foreach(App::make('Helper')->landing_list as $list){
+            $landing = App::make('Helper')->getLanding($list, Session::get($list));
+            $history_landing = App::make('Helper')->getLanding($list, Session::get('history_'.$list));
+            $name = studly_case(str_replace('landing', '', strtolower($list)));
+            $change = App::make('StatsManager')->evalChange($history_landing->sessions, $landing->sessions);
+
+            // Borrow total sessions from device group
+            $totalSessions = $this->getTotalSessions('Device', Session::get('device_data_set_id'));
+
+            $temp = array(
+                'name' => $name,
+                'sessions' => $landing->sessions,
+                'change' => $change,
+                'percent' => App::make('Helper')->formatDecimal($landing->sessions / $totalSessions * 100),
+                );
+            $sum += $landing->sessions;
+            $history_sum += $history_landing->sessions;
+            $output->push((object)$temp);
+        }
+        // Calculate other
+        $history_total_sessions = $this->getTotalSessions('Device', Session::get('history_device_data_set_id'));
+        $other_sessions = $totalSessions - $sum;
+        $history_other_sessions = $history_total_sessions - $history_sum;
+        $change = App::make('StatsManager')->evalChange($history_other_sessions, $other_sessions);
+
+        $name = 'Other';
+        $temp = array(
+                'name' => $name,
+                'sessions' => $other_sessions,
+                'change' => $change,
+                'percent' => App::make('Helper')->formatDecimal($other_sessions / $totalSessions * 100),
+                );
+        $output->push((object)$temp);
+        $output = $output->sortByDesc('sessions');
+        //s($output);
+        return $output;
+    }
     public function getDeviceStats($device) {
         $main_result = Device::where('dataset_id', '=', Session::get('device_data_set_id'))->whereName($device)->first();
         $history_result = Device::where('dataset_id', '=', Session::get('history_device_data_set_id'))->whereName($device)->first();
