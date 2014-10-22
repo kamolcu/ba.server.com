@@ -145,7 +145,7 @@
             ?>
             @foreach($landing_stats as $landing)
                 <div class="landing_stat_container_{{ $counter }}">
-                    <div class="ld_name">{{ ($counter + 1) . '. ' . $landing->name }}</div>
+                    <div class="ld_name text-left">{{ ($counter + 1) . '.' . $landing->name }}</div>
                     <div class="ld_session">{{ App::make('Helper')->formatInteger($landing->sessions) }}</div>
                     <div class="ld_percent">{{ '(' . App::make('Helper')->formatPercent($landing->percent) . ')' }}</div>
                     @if($landing->change['momentum'] == 1)

@@ -168,17 +168,18 @@ textarea {
 	left: 0;
 	top: 0;
 	font-size: 12px;
+	width: 30px;
 }
 .ld_change {
 	font-size: 12px;
-	position: relative;
-	left: 57px;
-	top: -54px;
+	position: inherit;
+	left: 60px;
+	top: 17px;
 }
 .ld_sign {
-	position: relative;
-	left: 27px;
-	top: -40px;
+	position: inherit;
+	left: 46px;
+	top: 17px;
 	font-size: 12px;
 }
 .product_page_sessions {
