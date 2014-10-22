@@ -192,7 +192,7 @@
             ?>
             @if($cart_abandon_change['momentum'] == 1)
                 <?php $sign = 'up_bad'; ?>
-                <img class="cart_aban_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png.png') }}">
+                <img class="cart_aban_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
             @elseif($cart_abandon_change['momentum'] == -1)
                 <?php $sign = 'down_good'; ?>
                 <img class="up_side_down cart_aban_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
