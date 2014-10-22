@@ -1,11 +1,9 @@
 @extends('layout.default')
 
 <?php
-    // Session::put('main_start', $main_start);
-    //     Session::put('main_end', $main_end);
-    //     Session::put('history_start', $history_start);
-    //     Session::put('history_end', $history_end);
+
     $header = App::make('ReportManager')->getReportHeader();
+    // Devices
     $devices = App::make('DeviceManager')->getDevicesList(Session::get('device_data_set_id'));
     $results = array();
     foreach($devices as $device){
@@ -13,29 +11,36 @@
     }
     $devices = (object)$results;
     $total_device_sessions = App::make('ReportManager')->getTotalSessions('Device', Session::get('device_data_set_id'));
-    $totalHistorySessions = App::make('ReportManager')->getTotalSessions('Device', Session::get('history_device_data_set_id'));
-    $LandingPageChange = App::make('StatsManager')->evalChange($totalHistorySessions, $total_device_sessions);
+    $total_history_device_sessions = App::make('ReportManager')->getTotalSessions('Device', Session::get('history_device_data_set_id'));
+    // ========
 
+    // Channels
     $channels = App::make('ReportManager')->getChannelStats();
     $total_channels = App::make('ReportManager')->getTotalSessions('Channel', Session::get('channel_data_set_id'));
+    // ========
 
+    // Product
     $product_sessions = App::make('ReportManager')->getSessions('GoalFunnel', 'Product Detail',Session::get('product_funnel_id'));
     $history_product_sessions = App::make('ReportManager')->getSessions('GoalFunnel', 'Product Detail',Session::get('history_product_funnel_id'));
     $productPageChange = App::make('StatsManager')->evalChange($history_product_sessions, $product_sessions);
-    // Session::put('product_data_set_id', $product->id);
-    // Session::put('history_product_data_set_id', $history_product->id);
+    // ========
+
+    // Checkout
     $checkout = App::make('ReportManager')->getSessions('GoalFunnel', 'Login',Session::get('product_funnel_id'));
     $history_checkout = App::make('ReportManager')->getSessions('GoalFunnel', 'Login',Session::get('history_product_funnel_id'));
-    $checkoutChange = App::make('StatsManager')->evalChange($history_checkout, $checkout);
-
-    $landing_conversion = App::make('StatsManager')->getConversionRate($total_device_sessions, $product_sessions);
-
-    $history_landing_conversion = App::make('StatsManager')->getConversionRate($totalHistorySessions, $history_product_sessions);
-    $landing_conversion_change = App::make('StatsManager')->evalChangePercent($history_landing_conversion, $landing_conversion);
-
+    $checkout_change = App::make('StatsManager')->evalChange($history_checkout, $checkout);
     $checkout_conversion = App::make('StatsManager')->getConversionRate($total_device_sessions, $checkout);
-    $history_checkout_conversion = App::make('StatsManager')->getConversionRate($totalHistorySessions, $history_checkout);
+    $history_checkout_conversion = App::make('StatsManager')->getConversionRate($total_history_device_sessions, $history_checkout);
     $checkout_conversion_change = App::make('StatsManager')->evalChangePercent($history_checkout_conversion, $checkout_conversion);
+    // ========
+
+    // Landing Page
+    $landing_page_change = App::make('StatsManager')->evalChange($total_history_device_sessions, $total_device_sessions);
+    $landing_conversion = App::make('StatsManager')->getConversionRate($total_device_sessions, $product_sessions);
+    $history_landing_conversion = App::make('StatsManager')->getConversionRate($total_history_device_sessions, $history_product_sessions);
+    $landing_conversion_change = App::make('StatsManager')->evalChangePercent($history_landing_conversion, $landing_conversion);
+    // ========
+
 
     $cart_abandon = App::make('StatsManager')->evalChange($product_sessions, $checkout);
     $history_cart_abandon = App::make('StatsManager')->evalChange($history_product_sessions, $history_checkout);
@@ -124,14 +129,14 @@
             ?>
             <div class="landing_page_sessions">{{ App::make('Helper')->formatInteger($total_device_sessions) }}</div>
             <div class="landing_conversion">{{ App::make('Helper')->formatPercent($landing_conversion) }}</div>
-            @if($LandingPageChange['momentum'] == 1)
+            @if($landing_page_change['momentum'] == 1)
                 <?php $sign = 'up'; ?>
                 <img class="landing_page_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
-            @elseif($LandingPageChange['momentum'] == -1)
+            @elseif($landing_page_change['momentum'] == -1)
                 <?php $sign = 'down'; ?>
                 <img class="up_side_down landing_page_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
             @endif
-            <div class="landing_page_change {{ $sign }}">{{ App::make('Helper')->formatPercent($LandingPageChange['percent']) }}</div>
+            <div class="landing_page_change {{ $sign }}">{{ App::make('Helper')->formatPercent($landing_page_change['percent']) }}</div>
             {{-- Landing End --}}
 
             {{-- Product --}}
@@ -163,14 +168,14 @@
                 $sign = '';
             ?>
             <div class="checkout_sessions">{{ App::make('Helper')->formatInteger($checkout) }}</div>
-            @if($checkoutChange['momentum'] == 1)
+            @if($checkout_change['momentum'] == 1)
                 <?php $sign = 'up'; ?>
                 <img class="checkout_page_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
-            @elseif($checkoutChange['momentum'] == -1)
+            @elseif($checkout_change['momentum'] == -1)
                 <?php $sign = 'down'; ?>
                 <img class="up_side_down checkout_page_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
             @endif
-            <div class="checkout_page_change {{ $sign }}">{{ App::make('Helper')->formatPercent($checkoutChange['percent']) }}</div>
+            <div class="checkout_page_change {{ $sign }}">{{ App::make('Helper')->formatPercent($checkout_change['percent']) }}</div>
 
 
             <?php
@@ -198,7 +203,6 @@
                 <img class="up_side_down cart_aban_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
             @endif
             <div class="cart_aban_change {{ $sign }}">{{ App::make('Helper')->formatPercent($cart_abandon_change['diff']) }}</div>
-
             {{-- Checkout End --}}
 
             {{-- Completed Orders --}}
