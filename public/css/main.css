@@ -116,6 +116,71 @@ textarea {
 	left: 405px;
 	top: 282px;
 }
+.landing_stat_container_0 {
+	position: absolute;
+	left: 365px;
+	top: 305px;
+}
+.landing_stat_container_1 {
+	position: absolute;
+	left: 365px;
+	top: 340px;
+}
+.landing_stat_container_2 {
+	position: absolute;
+	left: 365px;
+	top: 375px;
+}
+.landing_stat_container_3 {
+	position: absolute;
+	left: 365px;
+	top: 410px;
+}
+.landing_stat_container_4 {
+	position: absolute;
+	left: 365px;
+	top: 445px;
+}
+.landing_stat_container_5 {
+	position: absolute;
+	left: 365px;
+	top: 480px;
+}
+.landing_stat_container_6 {
+	position: absolute;
+	left: 365px;
+	top: 515px;
+}
+.ld_name {
+	position: relative;
+	left: 0;
+	top: 0;
+	font-size: 12px;
+}
+.ld_percent {
+	position: relative;
+	left: 70px;
+	top: -34px;
+	font-size: 12px;
+}
+.ld_session {
+	position: relative;
+	left: 0;
+	top: 0;
+	font-size: 12px;
+}
+.ld_change {
+	font-size: 12px;
+	position: relative;
+	left: 57px;
+	top: -54px;
+}
+.ld_sign {
+	position: relative;
+	left: 27px;
+	top: -40px;
+	font-size: 12px;
+}
 .product_page_sessions {
 	position: absolute;
 	left: 525px;

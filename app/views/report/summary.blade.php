@@ -39,6 +39,7 @@
     $landing_conversion = App::make('StatsManager')->getConversionRate($total_device_sessions, $product_sessions);
     $history_landing_conversion = App::make('StatsManager')->getConversionRate($total_history_device_sessions, $history_product_sessions);
     $landing_conversion_change = App::make('StatsManager')->evalChangePercent($history_landing_conversion, $landing_conversion);
+    $landing_stats = App::make('ReportManager')->getLandingStats();
     // ========
 
 
@@ -137,6 +138,27 @@
                 <img class="up_side_down landing_page_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
             @endif
             <div class="landing_page_change {{ $sign }}">{{ App::make('Helper')->formatPercent($landing_page_change['percent']) }}</div>
+
+            <?php
+                $sign = '';
+                $counter = 0;
+            ?>
+            @foreach($landing_stats as $landing)
+                <div class="landing_stat_container_{{ $counter }}">
+                    <div class="ld_name">{{ ($counter + 1) . '. ' . $landing->name }}</div>
+                    <div class="ld_session">{{ App::make('Helper')->formatInteger($landing->sessions) }}</div>
+                    <div class="ld_percent">{{ '(' . App::make('Helper')->formatPercent($landing->percent) . ')' }}</div>
+                    @if($landing->change['momentum'] == 1)
+                        <?php $sign = 'up'; ?>
+                        <img class="ld_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
+                    @elseif($landing->change['momentum'] == -1)
+                        <?php $sign = 'down'; ?>
+                        <img class="up_side_down ld_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
+                    @endif
+                    <div class="ld_change {{ $sign }}">{{ App::make('Helper')->formatPercent($landing->change['percent']) }}</div>
+                </div>
+                <?php $counter++; ?>
+            @endforeach
             {{-- Landing End --}}
 
             {{-- Product --}}
