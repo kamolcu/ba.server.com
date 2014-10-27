@@ -61,7 +61,8 @@
         var day = match[3];
         var dd = new Date(year, month - 1, day, 0, 0, 0, 0);
         var newDate = addDays(dd, {{ $default_days_buffer }});
-        $('#main_end').val(newDate.getFullYear() + '-' + formatTwoDigits(newDate.getMonth() + 1) + '-' + formatTwoDigits(newDate.getDate()));
+        var endDateString = newDate.getFullYear() + '-' + formatTwoDigits(newDate.getMonth() + 1) + '-' + formatTwoDigits(newDate.getDate());
+        $('#main_end').datepicker('update', endDateString);
     });
 
     $('#history_start').bind('change', function(){
@@ -73,7 +74,8 @@
         var day = match[3];
         var dd = new Date(year, month - 1, day, 0, 0, 0, 0);
         var newDate = addDays(dd, {{ $default_days_buffer }});
-        $('#history_end').val(newDate.getFullYear() + '-' + formatTwoDigits(newDate.getMonth() + 1) + '-' + formatTwoDigits(newDate.getDate()));
+        var endDateString = newDate.getFullYear() + '-' + formatTwoDigits(newDate.getMonth() + 1) + '-' + formatTwoDigits(newDate.getDate());
+        $('#history_end').datepicker('update', endDateString);
     });
 
     $('#main_start').datepicker({

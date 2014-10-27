@@ -16,6 +16,11 @@ class HomeController extends BaseController
     |
     */
     public function frontPage($subdomain = 'funnel') {
+
+        if(Input::has('dev')){
+            return View::make('front');
+        }
+
         if (!Session::has('client')) {
             $client = new Google_Client();
             $client->setApplicationName("Funnel Application");
@@ -37,9 +42,8 @@ class HomeController extends BaseController
         } else {
             $authUrl = $client->createAuthUrl();
             Session::put('client', serialize($client));
-            return Redirect::to($authUrl); // Google's page
-
-
+            // Google's page
+            return Redirect::to($authUrl);
         }
 
         return View::make('front');
