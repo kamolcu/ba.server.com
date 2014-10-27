@@ -4,16 +4,6 @@
 ?>
 @section('content')
     <div class="row text-center head">
-    @if(Session::has('message'))
-        <div class="alert alert-success">
-            {{ Session::get('message') }}
-        </div>
-    @endif
-    @if ( Session::has('error') )
-        <div class="alert alert-error alert-danger">
-            {{ Session::get('error') }}
-        </div>
-    @endif
     {{ Form::open(array('route' => 'compare', 'class' => 'form-horizontal', 'files' => false, 'id' => 'form_compare')) }}
         <div class="col-xs-12 col-sm-12 col-md-5 col-md-offset-1 panel panel-info">
             <h3 class="panel-heading"><span class="glyphicon glyphicon glyphicon-star">&nbsp;{{ Config::get('config.main_range')}}</h3>

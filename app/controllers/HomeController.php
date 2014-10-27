@@ -59,8 +59,13 @@ class HomeController extends BaseController
         $main_end_date = new Carbon($main_end);
         $history_start_date = new Carbon($history_start);
         $history_end_date = new Carbon($history_end);
-        if($main_start_date > $main_end_date){
-            $msg = Config::get('config.start_date') . 'ต้องมาก่อนวันสิ้นสุด';
+        if ($main_start_date > $main_end_date) {
+            $msg = Config::get('config.main_range') . ' ' . Config::get('config.start_date') . Config::get('config.incorrect_start_date');
+            return Redirect::to('/')->with('error', $msg);
+        }
+
+        if ($history_start_date > $history_end_date) {
+            $msg = Config::get('config.historical_range') . ' ' . Config::get('config.start_date') . Config::get('config.incorrect_start_date');
             return Redirect::to('/')->with('error', $msg);
         }
 

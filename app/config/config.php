@@ -16,4 +16,5 @@ return array(
     'end_date' => 'วันสิ้นสุด',
     'main_range' => 'ช่วงเวลาหลัก',
     'historical_range' => 'ช่วงเวลาเปรียบเทียบ',
+    'incorrect_start_date' => 'ต้องมาก่อนวันสิ้นสุด',
 );
