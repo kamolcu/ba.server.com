@@ -25,8 +25,8 @@ class HomeController extends BaseController
             $client = new Google_Client();
             $client->setApplicationName("Funnel Application");
 
-            $client->setClientId('137589562420-65fhcns4kqiu1o2rukbf37289tqunjet.apps.googleusercontent.com');
-            $client->setClientSecret('pEmBCrl9AhmqSthR2I1qi1oH');
+            $client->setClientId(Config::get('app.google_client_id'));
+            $client->setClientSecret(Config::get('app.google_secret'));
             $client->setRedirectUri(URL::route('front') . '/oauth2callback');
             //$client->setDeveloperKey('AIzaSyDGlZpsatv30xAitjk1U2Ra78zrTbbtzQs');
             $client->setScopes(array(

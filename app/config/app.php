@@ -194,4 +194,7 @@ return array(
 
 	),
 
+	'google_client_id' => '137589562420-65fhcns4kqiu1o2rukbf37289tqunjet.apps.googleusercontent.com',
+	'google_secret' => 'pEmBCrl9AhmqSthR2I1qi1oH',
+
 );

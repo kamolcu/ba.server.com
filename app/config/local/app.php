@@ -14,5 +14,8 @@ return array(
 	*/
 
 	'debug' => true,
+	'google_client_id' => '137589562420-m1hh63jd1eguneonocspufl9d7vr5ki5.apps.googleusercontent.com',
+	'google_secret' => 'Kqx7ak7jM2qr0VtH1de-C-FF',
+	'' => '',
 
 );
