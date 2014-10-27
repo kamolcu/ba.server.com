@@ -1,0 +1,20 @@
+.waiting-bg {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #fbfdff;
+    z-index: 10001;
+    opacity: 0.7;
+    text-align: center;
+    display: none;
+}
+
+.waiting-icon-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 10002;
+    display: none;
+}

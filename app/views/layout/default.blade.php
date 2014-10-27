@@ -73,5 +73,6 @@
 <script src="{{{ asset('js/plugins.js') }}}"></script>
 <script src="{{{ asset('js/main.js') }}}"></script>
 @yield('page-js-script')
+@include('ajaxloading')
 </body>
 </html>
