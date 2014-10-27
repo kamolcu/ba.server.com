@@ -1,5 +1,7 @@
 @extends('layout.default')
-
+<?php
+    $default_days_buffer = Config::get('config.days-buffer', 7);
+?>
 @section('content')
     <div class="row text-center head">
     {{ Form::open(array('route' => 'compare', 'class' => 'form-horizontal', 'files' => false, 'id' => 'form_compare')) }}
@@ -42,6 +44,36 @@
         // Add precondition here
         $('#form_compare').submit();
     }
+    function addDays(theDate, days) {
+        return new Date(theDate.getTime() + days*24*60*60*1000);
+    }
+    function formatTwoDigits(input){
+        return ("0" + input).slice(-2);
+    }
+
+    $('#main_start').bind('change', function(){
+        //console.log($(this).val());
+        var myRegex = /([0-9]{4})-([0-9]{2})-([0-9]{2})/;
+        var match = myRegex.exec($(this).val());
+        var year = match[1];
+        var month = match[2];
+        var day = match[3];
+        var dd = new Date(year, month - 1, day, 0, 0, 0, 0);
+        var newDate = addDays(dd, {{ $default_days_buffer }});
+        $('#main_end').val(newDate.getFullYear() + '-' + formatTwoDigits(newDate.getMonth() + 1) + '-' + formatTwoDigits(newDate.getDate()));
+    });
+
+    $('#history_start').bind('change', function(){
+        //console.log($(this).val());
+        var myRegex = /([0-9]{4})-([0-9]{2})-([0-9]{2})/;
+        var match = myRegex.exec($(this).val());
+        var year = match[1];
+        var month = match[2];
+        var day = match[3];
+        var dd = new Date(year, month - 1, day, 0, 0, 0, 0);
+        var newDate = addDays(dd, {{ $default_days_buffer }});
+        $('#history_end').val(newDate.getFullYear() + '-' + formatTwoDigits(newDate.getMonth() + 1) + '-' + formatTwoDigits(newDate.getDate()));
+    });
 
     $('#main_start').datepicker({
         format: "yyyy-mm-dd",
