@@ -4,26 +4,36 @@
 ?>
 @section('content')
     <div class="row text-center head">
+    @if(Session::has('message'))
+        <div class="alert alert-success">
+            {{ Session::get('message') }}
+        </div>
+    @endif
+    @if ( Session::has('error') )
+        <div class="alert alert-error alert-danger">
+            {{ Session::get('error') }}
+        </div>
+    @endif
     {{ Form::open(array('route' => 'compare', 'class' => 'form-horizontal', 'files' => false, 'id' => 'form_compare')) }}
         <div class="col-xs-12 col-sm-12 col-md-5 col-md-offset-1 panel panel-info">
-            <h3 class="panel-heading"><span class="glyphicon glyphicon glyphicon-star">&nbsp;ช่วงเวลาหลัก</h3>
+            <h3 class="panel-heading"><span class="glyphicon glyphicon glyphicon-star">&nbsp;{{ Config::get('config.main_range')}}</h3>
             <dl class="dl-horizontal">
-                <dt>{{ Form::label('main_start', 'วันเริ่ม', array('class' => 'left-label') ) }}:</dt>
+                <dt>{{ Form::label('main_start', Config::get('config.start_date'), array('class' => 'left-label') ) }}:</dt>
                 <dd>{{ Form::text('main_start', App::make('Helper')->getDefaultStartDate()->toDateString(), array('id' => 'main_start', 'class' => 'form-control left-label', 'placeholder' => 'yyyy-mm-dd', 'readonly') ) }}</dd>
             </dl>
             <dl class="dl-horizontal">
-                <dt>{{ Form::label('main_end', 'วันสิ้นสุด', array('class' => 'left-label') ) }}:</dt>
+                <dt>{{ Form::label('main_end', Config::get('config.end_date'), array('class' => 'left-label') ) }}:</dt>
                 <dd>{{ Form::text('main_end', App::make('Helper')->getDefaultEndDate()->toDateString(), array('id' => 'main_end', 'class' => 'form-control left-label', 'placeholder' => 'yyyy-mm-dd', 'readonly') ) }}</dd>
             </dl>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-5 panel panel-info">
-            <h3 class="panel-heading"><span class="glyphicon glyphicon glyphicon-time">&nbsp;ช่วงเวลาเปรียบเทียบ (historical data)</h3>
+            <h3 class="panel-heading"><span class="glyphicon glyphicon glyphicon-time">&nbsp;{{ Config::get('config.historical_range')}} (historical data)</h3>
             <dl class="dl-horizontal">
-                <dt>{{ Form::label('history_start', 'วันเริ่ม', array('class' => 'left-label') ) }}:</dt>
+                <dt>{{ Form::label('history_start', Config::get('config.start_date'), array('class' => 'left-label') ) }}:</dt>
                 <dd>{{ Form::text('history_start', App::make('Helper')->getDefaultHistoryStartDate()->toDateString(), array('id' => 'history_start', 'class' => 'form-control left-label', 'placeholder' => 'yyyy-mm-dd', 'readonly') ) }}</dd>
             </dl>
             <dl class="dl-horizontal">
-                <dt>{{ Form::label('history_end', 'วันสิ้นสุด', array('class' => 'left-label') ) }}:</dt>
+                <dt>{{ Form::label('history_end', Config::get('config.end_date'), array('class' => 'left-label') ) }}:</dt>
                 <dd>{{ Form::text('history_end', App::make('Helper')->getDefaultHistoryEndDate()->toDateString(), array('id' => 'history_end', 'class' => 'form-control left-label', 'placeholder' => 'yyyy-mm-dd', 'readonly') ) }}</dd>
             </dl>
         </div>

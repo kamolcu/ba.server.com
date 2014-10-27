@@ -1,4 +1,6 @@
 <?php
+use Carbon\Carbon;
+
 class HomeController extends BaseController
 {
     /*
@@ -47,12 +49,20 @@ class HomeController extends BaseController
 
         $msg = sprintf('Compare inputs = %s', print_r(Input::all() , true));
         Log::debug($msg);
-
         // TODO: validation of date inputs
         $main_start = Input::get('main_start');
         $main_end = Input::get('main_end');
         $history_start = Input::get('history_start');
         $history_end = Input::get('history_end');
+
+        $main_start_date = new Carbon($main_start);
+        $main_end_date = new Carbon($main_end);
+        $history_start_date = new Carbon($history_start);
+        $history_end_date = new Carbon($history_end);
+        if($main_start_date > $main_end_date){
+            $msg = Config::get('config.start_date') . 'ต้องมาก่อนวันสิ้นสุด';
+            return Redirect::to('/')->with('error', $msg);
+        }
 
         Session::put('main_start', $main_start);
         Session::put('main_end', $main_end);

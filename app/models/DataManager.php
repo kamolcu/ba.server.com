@@ -48,13 +48,13 @@ class DataManager
 
     public function loadSegmentData($analytics, $startDate, $endDate) {
         $segments = array(
-            'product_page_key' => 'gaid::-J7xFdBnTc-N8bwRmfav4g',
-            'step1' => 'gaid::21T4EHVlT0iC-OzTXSgZ5g',
-            'step1_backfill' => 'gaid::zAK28cQdRUWvPfBLyj-7Lw',
-            'step2' => 'gaid::PQC15kX4RWqskclOlwK-WA',
-            'step2_backfill' => 'gaid::coBG9BWrTUSey7WmVkV3Zg',
-            'step3' => 'gaid::T6i-2UHRRG2M0ZWnjAfoTA',
-            'step3_backfill' => 'gaid::lJ_9tMa8QqOS-yJaMcEt0w',
+            'product_page_key' => Config::get('config.product_page_key'),
+            'step1' => Config::get('config.step1'),
+            'step1_backfill' => Config::get('config.step1_backfill'),
+            'step2' => Config::get('config.step2'),
+            'step2_backfill' => Config::get('config.step2_backfill'),
+            'step3' => Config::get('config.step3'),
+            'step3_backfill' => Config::get('config.step3_backfill'),
         );
 
         $datasetName = 'Segment';
