@@ -1,6 +1,7 @@
 @extends('layout.default')
 <?php
     $default_days_buffer = Config::get('config.days-buffer', 7);
+    $historical_days_buffer = Config::get('config.historical-days-buffer', 30);
 ?>
 @section('content')
     <div class="row text-center head">
@@ -63,6 +64,10 @@
         var newDate = addDays(dd, {{ $default_days_buffer }});
         var endDateString = newDate.getFullYear() + '-' + formatTwoDigits(newDate.getMonth() + 1) + '-' + formatTwoDigits(newDate.getDate());
         $('#main_end').datepicker('update', endDateString);
+
+        newDate = addDays(dd, -{{ $historical_days_buffer }});
+        endDateString = newDate.getFullYear() + '-' + formatTwoDigits(newDate.getMonth() + 1) + '-' + formatTwoDigits(newDate.getDate());
+        $('#history_start').datepicker('update', endDateString);
     });
 
     $('#history_start').bind('change', function(){

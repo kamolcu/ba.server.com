@@ -5,6 +5,7 @@ return array(
     'other-channel-count' => 5,
     'channels-take' => 7,
     'days-buffer' => 7,
+    'historical-days-buffer' => 30,
     'product_page_key' => 'gaid::-J7xFdBnTc-N8bwRmfav4g',
     'step1' => 'gaid::21T4EHVlT0iC-OzTXSgZ5g',
     'step1_backfill' => 'gaid::zAK28cQdRUWvPfBLyj-7Lw',
