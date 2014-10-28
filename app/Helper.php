@@ -211,7 +211,7 @@ class Helper
         return str_pad($input, $length, '0', STR_PAD_LEFT);
     }
     public function formatPercent($input) {
-        return $this->padSpace(($this->formatDecimal($input)) , 5) . '%';
+        return $this->padSpace(($this->formatDecimal($input, '')) , 5) . '%';
     }
     public function test($input) {
         return '&nbsp;' . $input;

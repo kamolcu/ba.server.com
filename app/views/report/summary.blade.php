@@ -104,10 +104,12 @@
             {{-- Channel --}}
             <?php
                 $index = 0;
-                $sign = '';
             ?>
             @foreach($channels as $channel)
-            <?php $channel = (object)$channel; ?>
+                <?php
+                    $channel = (object)$channel;
+                    $sign = '';
+                ?>
                 <div class="channel_name_{{ $index }}">{{ $channel->name }}</div>
                 <div class="channel_sessions_percent_{{ $index }}">{{ '('.App::make('Helper')->formatPercent($channel->sessions / $total_channels * 100).')' }}</div>
                 <div class="channel_sessions_{{ $index }}">{{ App::make('Helper')->formatInteger($channel->sessions) }}</div>
@@ -140,10 +142,12 @@
             <div class="landing_page_change {{ $sign }}">{{ App::make('Helper')->formatPercent($landing_page_change['percent']) }}</div>
 
             <?php
-                $sign = '';
                 $counter = 0;
             ?>
             @foreach($landing_stats as $landing)
+                <?php
+                    $sign = '';
+                 ?>
                 <div class="landing_stat_container_{{ $counter }}">
                     <div class="ld_name text-left">{{ ($counter + 1) . '.' . $landing->name }}</div>
                     <div class="ld_session">{{ App::make('Helper')->formatInteger($landing->sessions) }}</div>
@@ -162,6 +166,9 @@
             {{-- Landing End --}}
 
             {{-- Product --}}
+            <?php
+                $sign = '';
+            ?>
             <div class="product_page_sessions">{{ App::make('Helper')->formatInteger($product_sessions) }}</div>
             @if($productPageChange['momentum'] == 1)
                 <?php $sign = 'up'; ?>
