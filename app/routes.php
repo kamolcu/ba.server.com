@@ -68,6 +68,18 @@ Route::get('summary', array(
     'uses' => 'HomeController@summaryView'
 ));
 
+Route::get('/download/{filePath}', array(
+    'as' => 'file.download',
+    function ($filePath) {
+        $fullPath = public_path() . '/download/' . $filePath;
+        if (file_exists($fullPath)) {
+            return Response::download($fullPath);
+        } else {
+            return 'Error 404 - File not found. (' . $filePath .')';
+        }
+    }
+));
+
 Route::get('/{a}', array(
     'as' => 'w1',
     'uses' => 'HomeController@showWelcome'
