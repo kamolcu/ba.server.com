@@ -6,15 +6,15 @@ class ReportManager
         $output = new Illuminate\Support\Collection();
         $sum = 0;
         $history_sum = 0;
-        $totalSessions = 0;
+        // Borrow total sessions from device group
+        $totalSessions = $this->getTotalSessions('Device', Session::get('device_data_set_id'));
         foreach(App::make('Helper')->landing_list as $list){
             $landing = App::make('Helper')->getLanding($list, Session::get($list));
             $history_landing = App::make('Helper')->getLanding($list, Session::get('history_'.$list));
             $name = studly_case(str_replace('landing', '', strtolower($list)));
             $change = App::make('StatsManager')->evalChange($history_landing->sessions, $landing->sessions);
 
-            // Borrow total sessions from device group
-            $totalSessions = $this->getTotalSessions('Device', Session::get('device_data_set_id'));
+
 
             $temp = array(
                 'name' => $name,
@@ -41,7 +41,6 @@ class ReportManager
                 );
         $output->push((object)$temp);
         $output = $output->sortByDesc('sessions');
-        //s($output);
         return $output;
     }
     public function getDeviceStats($device) {
