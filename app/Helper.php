@@ -16,6 +16,17 @@ class Helper
         'Landing Search',
         'Landing Everyday-wow',
     );
+    public $paymentChannels = array(
+        '1' => 'Credit Card',
+        '2' => 'Ewallet',
+        '3' => 'Installment',
+        '4' => 'ATM',
+        '5' => 'iBanking',
+        '6' => 'Bank Counter',
+        '7' => 'COD',
+        '8' => 'Counter Service',
+
+    );
     public function preLoad($start, $end, $historyStart, $historyEnd) {
         $deviceDataSet = App::make('Helper')->getDataSet('Device', $start, $end);
         $historyDeviceDataSet = App::make('Helper')->getDataSet('Device', $historyStart, $historyEnd);
@@ -29,11 +40,11 @@ class Helper
         $funnel = App::make('Helper')->getDataSet('Segment', $start, $end);
         $history_funnel = App::make('Helper')->getDataSet('Segment', $historyStart, $historyEnd);
 
-        foreach($this->landing_list as $list){
+        foreach ($this->landing_list as $list) {
             $landing = App::make('Helper')->getDataSet($list, $start, $end);
             $history_landing = App::make('Helper')->getDataSet($list, $historyStart, $historyEnd);
             Session::put($list, $landing->id);
-            Session::put('history_'.$list, $history_landing->id);
+            Session::put('history_' . $list, $history_landing->id);
         }
 
         Session::put('main_start', $start);
