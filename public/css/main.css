@@ -85,6 +85,38 @@ textarea {
 .report_header{
 	font-size: 22px;
 }
+.paid_orders {
+	position: absolute;
+	left: 909px;
+	top: 385px;
+	font-size: 18px;
+}
+.paid_orders_sign{
+	position: absolute;
+	left: 909px;
+	top: 410px;
+}
+.paid_orders_change{
+	position: absolute;
+	left: 918px;
+	top: 410px;
+}
+.complete_order {
+	position: absolute;
+	left: 791px;
+	top: 385px;
+	font-size: 18px;
+}
+.complete_order_sign{
+	position: absolute;
+	left: 791px;
+	top: 410px;
+}
+.complete_order_change{
+	position: absolute;
+	left: 802px;
+	top: 410px;
+}
 .landing_conv_sign {
 	position: absolute;
 	left: 534px;
@@ -185,34 +217,34 @@ textarea {
 .product_page_sessions {
 	position: absolute;
 	left: 525px;
-	top: 375px;
+	top: 385px;
 	font-size: 18px;
 }
 .product_page_sign {
 	position: absolute;
 	left: 525px;
-	top: 400px;
+	top: 410px;
 }
 .product_page_change {
 	position: absolute;
 	left: 537px;
-	top: 400px;
+	top: 410px;
 }
 .checkout_sessions {
 	position: absolute;
 	left: 656px;
-	top: 375px;
+	top: 385px;
 	font-size: 18px;
 }
 .checkout_page_sign {
 	position: absolute;
 	left: 644px;
-	top: 400px;
+	top: 410px;
 }
 .checkout_page_change {
 	position: absolute;
 	left: 657px;
-	top: 400px;
+	top: 410px;
 }
 .checkout_conv_sign {
 	position: absolute;
