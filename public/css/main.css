@@ -85,21 +85,68 @@ textarea {
 .report_header{
 	font-size: 22px;
 }
+.paid_order_conv_change {
+	position: absolute;
+	left: 782px;
+	top: 692px;
+}
+.paid_order_conv_sign {
+	position: absolute;
+	left: 769px;
+	top: 694px;
+}
+.payment_success_sign {
+	position: absolute;
+	left: 906px;
+	top: 467px;
+}
+.payment_success {
+	position: absolute;
+	left: 918px;
+	top: 469px;
+	font-size: 12px;
+}
+.payment_success_rate {
+	position: absolute;
+	left: 861px;
+	top: 469px;
+	font-size: 12px;
+}
+.paid_orders_conversion{
+	position: absolute;
+	left: 716px;
+	top: 692px;
+}
 .paid_orders {
 	position: absolute;
 	left: 909px;
 	top: 385px;
 	font-size: 18px;
 }
-.paid_orders_sign{
+.paid_orders_sign {
 	position: absolute;
 	left: 909px;
 	top: 410px;
 }
-.paid_orders_change{
+.paid_orders_change {
 	position: absolute;
 	left: 918px;
 	top: 410px;
+}
+.completed_order_conv_change {
+	position: absolute;
+	left: 739px;
+	top: 657px;
+}
+.completed_order_conv_sign {
+	position: absolute;
+	left: 724px;
+	top: 659px;
+}
+.completed_order_conversion{
+	position: absolute;
+	left: 670px;
+	top: 657px;
 }
 .complete_order {
 	position: absolute;
@@ -107,15 +154,32 @@ textarea {
 	top: 385px;
 	font-size: 18px;
 }
-.complete_order_sign{
+.complete_order_sign {
 	position: absolute;
 	left: 791px;
 	top: 410px;
 }
-.complete_order_change{
+.complete_order_change {
 	position: absolute;
 	left: 802px;
 	top: 410px;
+}
+.checkout_no_order_rate {
+	position: absolute;
+	left: 745px;
+	top: 498px;
+	font-size: 12px;
+}
+.checkout_no_order_sign {
+	position: absolute;
+	left: 790px;
+	top: 496px;
+}
+.checkout_no_order {
+	position: absolute;
+	left: 802px;
+	top: 498px;
+	font-size: 12px;
 }
 .landing_conv_sign {
 	position: absolute;
