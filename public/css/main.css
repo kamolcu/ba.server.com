@@ -85,6 +85,75 @@ textarea {
 .report_header{
 	font-size: 22px;
 }
+.pcms_orders {
+	font-size: 11px !important;
+}
+.pcms_name {
+	position: relative;
+	left: 0;
+	top: 0;
+	font-size: 12px;
+}
+.pcms_percent {
+	position: relative;
+	left: 70px;
+	top: -29px;
+	font-size: 12px;
+}
+.pcms_session {
+	position: relative;
+	left: 0;
+	top: -3px;
+	font-size: 12px;
+	width: 30px;
+}
+.pcms_change {
+	font-size: 12px;
+	position: inherit;
+	left: 60px;
+	top: 14px;
+}
+.pcms_sign {
+	position: inherit;
+	left: 46px;
+	top: 13px;
+	font-size: 12px;
+}
+.paid_container_0 {
+	position: absolute;
+	left: 888px;
+	top: 203px;
+}
+.paid_container_1 {
+	position: absolute;
+	left: 888px;
+	top: 229px;
+}
+.paid_container_2 {
+	position: absolute;
+	left: 888px;
+	top: 255px;
+}
+.paid_container_3 {
+	position: absolute;
+	left: 888px;
+	top: 282px;
+}
+.paid_container_4 {
+	position: absolute;
+	left: 888px;
+	top: 307px;
+}
+.paid_container_5 {
+	position: absolute;
+	left: 888px;
+	top: 333px;
+}
+.paid_container_6 {
+	position: absolute;
+	left: 888px;
+	top: 358px;
+}
 .paid_order_conv_change {
 	position: absolute;
 	left: 782px;
@@ -132,6 +201,41 @@ textarea {
 	position: absolute;
 	left: 918px;
 	top: 410px;
+}
+.completed_container_0 {
+	position: absolute;
+	left: 755px;
+	top: 203px;
+}
+.completed_container_1 {
+	position: absolute;
+	left: 755px;
+	top: 229px;
+}
+.completed_container_2 {
+	position: absolute;
+	left: 755px;
+	top: 255px;
+}
+.completed_container_3 {
+	position: absolute;
+	left: 755px;
+	top: 282px;
+}
+.completed_container_4 {
+	position: absolute;
+	left: 755px;
+	top: 307px;
+}
+.completed_container_5 {
+	position: absolute;
+	left: 755px;
+	top: 333px;
+}
+.completed_container_6 {
+	position: absolute;
+	left: 755px;
+	top: 358px;
 }
 .completed_order_conv_change {
 	position: absolute;
