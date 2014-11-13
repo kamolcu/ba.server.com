@@ -8,7 +8,8 @@
 		"google/apiclient": "1.0.6-beta",
 		"kmd/logviewer": "1.2.0",
 		"darsain/laravel-console": "dev-master",
-		"raveren/kint": "0.9.1"
+		"raveren/kint": "0.9.1",
+		"guzzlehttp/guzzle": "5.0.3"
 	},
 	"require-dev": {
 		"way/generators": "2.6.1"

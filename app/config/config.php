@@ -18,4 +18,6 @@ return array(
     'main_range' => 'ช่วงเวลาหลัก',
     'historical_range' => 'ช่วงเวลาเปรียบเทียบ',
     'incorrect_start_date' => 'ต้องมาก่อนวันสิ้นสุด',
+    'local.pcms_api_url' => 'http://www.pcms.loc/api/45311375168544/orders/get-by-period',
+    'production.pcms_api_url' => 'http://pcms.itruemart.com/api/45311375168544/orders/get-by-period',
 );
