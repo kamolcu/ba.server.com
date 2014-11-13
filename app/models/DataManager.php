@@ -44,17 +44,31 @@ class DataManager
         }
 
         $this->loadSegmentData($analytics, $startDate, $endDate);
+
+        $datasetName = 'Completed Order';
+        $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
+        $data = App::make('PCMSManager')->getCompletedOrder($startDate, $endDate);
+        if (!empty($data)) {
+            App::make('PCMSManager')->updateData('CompleteOrder', $data, $ds->id);
+        }
+
+        $datasetName = 'Paid Order';
+        $ds = App::make('DatasetManager')->updateData($datasetName, $startDate, $endDate);
+        $data = App::make('PCMSManager')->getPaidOrder($startDate, $endDate);
+        if (!empty($data)) {
+            App::make('PCMSManager')->updateData('PaidOrder', $data, $ds->id);
+        }
     }
 
     public function loadSegmentData($analytics, $startDate, $endDate) {
         $segments = array(
-            'product_page_key' => Config::get('config.product_page_key'),
-            'step1' => Config::get('config.step1'),
-            'step1_backfill' => Config::get('config.step1_backfill'),
-            'step2' => Config::get('config.step2'),
-            'step2_backfill' => Config::get('config.step2_backfill'),
-            'step3' => Config::get('config.step3'),
-            'step3_backfill' => Config::get('config.step3_backfill'),
+            'product_page_key' => Config::get('config.product_page_key') ,
+            'step1' => Config::get('config.step1') ,
+            'step1_backfill' => Config::get('config.step1_backfill') ,
+            'step2' => Config::get('config.step2') ,
+            'step2_backfill' => Config::get('config.step2_backfill') ,
+            'step3' => Config::get('config.step3') ,
+            'step3_backfill' => Config::get('config.step3_backfill') ,
         );
 
         $datasetName = 'Segment';
@@ -75,7 +89,6 @@ class DataManager
         }
         $msg = sprintf('segment values = %s', print_r($extracted, true));
         Log::debug($msg);
-
         // Product Detail
         $name = 'Product Detail';
         $value = $extracted['product_page_key']['goal1Starts'];
@@ -142,6 +155,5 @@ class DataManager
         );
         $rules = array();
         App::make('SegmentManager')->updateData($name, $inputs, $rules, $ds->id);
-
     }
 }

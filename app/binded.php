@@ -9,3 +9,4 @@ App::singleton('DataManager', 'DataManager');
 App::singleton('SegmentManager', 'SegmentManager');
 App::singleton('StatsManager', 'StatsManager');
 App::singleton('ReportManager', 'ReportManager');
+App::singleton('PCMSManager', 'PCMSManager');

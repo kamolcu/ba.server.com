@@ -16,17 +16,6 @@ class Helper
         'Landing Search',
         'Landing Everyday-wow',
     );
-    public $paymentChannels = array(
-        '1' => 'Credit Card',
-        '2' => 'Ewallet',
-        '3' => 'Installment',
-        '4' => 'ATM',
-        '5' => 'iBanking',
-        '6' => 'Bank Counter',
-        '7' => 'COD',
-        '8' => 'Counter Service',
-
-    );
     public function preLoad($start, $end, $historyStart, $historyEnd) {
         $deviceDataSet = App::make('Helper')->getDataSet('Device', $start, $end);
         $historyDeviceDataSet = App::make('Helper')->getDataSet('Device', $historyStart, $historyEnd);
@@ -97,6 +86,14 @@ class Helper
     }
     public function getChannel($name, $datasetId) {
         $row = Channel::whereName($name)->where('dataset_id', '=', $datasetId)->first();
+        return $row;
+    }
+    public function isCompletedOrderExists($name, $datasetId) {
+        $row = $this->getCompletedOrder($name, $datasetId);
+        return !empty($row);
+    }
+    public function getCompletedOrder($name, $datasetId) {
+        $row = CompleteOrder::whereName($name)->where('dataset_id', '=', $datasetId)->first();
         return $row;
     }
     public function isDatasetExists($name, $startDate, $endDate) {
