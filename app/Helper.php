@@ -29,6 +29,12 @@ class Helper
         $funnel = App::make('Helper')->getDataSet('Segment', $start, $end);
         $history_funnel = App::make('Helper')->getDataSet('Segment', $historyStart, $historyEnd);
 
+        $completed_order = App::make('Helper')->getDataSet('Completed Order', $start, $end);
+        $completed_order_history = App::make('Helper')->getDataSet('Completed Order', $historyStart, $historyEnd);
+
+        $paid_order = App::make('Helper')->getDataSet('Paid Order', $start, $end);
+        $paid_order_history = App::make('Helper')->getDataSet('Paid Order', $historyStart, $historyEnd);
+
         foreach ($this->landing_list as $list) {
             $landing = App::make('Helper')->getDataSet($list, $start, $end);
             $history_landing = App::make('Helper')->getDataSet($list, $historyStart, $historyEnd);
@@ -51,6 +57,10 @@ class Helper
         Session::put('history_channel_data_set_id', $historyChannelDataSet->id);
         Session::put('channel_other_data_set_id', $otherChannelDataset->id);
         Session::put('history_other_channel_data_set_id', $historyOtherChannelDataSet->id);
+        Session::put('completed_order_id', $completed_order->id);
+        Session::put('history_completed_order_id', $completed_order_history->id);
+        Session::put('paid_order_id', $paid_order->id);
+        Session::put('history_paid_order_id', $paid_order_history->id);
     }
     public function isDataSetFinished($startDate, $endDate) {
         $result = FinishedDataset::where('start_date', '=', $startDate)->where('end_date', '=', $endDate)->first();
@@ -95,6 +105,14 @@ class Helper
     public function getCompletedOrder($name, $datasetId) {
         $row = CompleteOrder::whereName($name)->where('dataset_id', '=', $datasetId)->first();
         return $row;
+    }
+    public function getCompletedOrders($datasetId) {
+        $rows = CompleteOrder::where('dataset_id', '=', $datasetId)->get();
+        return $rows;
+    }
+    public function getPaidOrders($datasetId) {
+        $rows = PaidOrder::where('dataset_id', '=', $datasetId)->get();
+        return $rows;
     }
     public function isDatasetExists($name, $startDate, $endDate) {
         $row = $this->getDataSet($name, $startDate, $endDate);

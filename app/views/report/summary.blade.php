@@ -47,14 +47,30 @@
     $cart_abandon_change = App::make('StatsManager')->evalChangePercent($history_cart_abandon['percent'], $cart_abandon['percent']);
 
     // Completed order data from PCMS
-    $completed_orders = '706';
+    $completed_orders_stats = App::make('ReportManager')->getCompletedOrderStats();
+    $completed_orders = App::make('Helper')->getCompletedOrders(Session::get('completed_order_id'))->sum('count');
+    $complete_orders_history = App::make('Helper')->getCompletedOrders(Session::get('history_completed_order_id'))->sum('count');
+
     $checkout_no_order = App::make('StatsManager')->evalChange($checkout, $completed_orders);
-    $complete_orders_change = array('momentum' => 1, 'percent' => '10.23');
-    $paid_orders = '569';
+    $complete_orders_change = App::make('StatsManager')->evalChange($complete_orders_history, $completed_orders);
+
+    $paid_orders_stats = App::make('ReportManager')->getPaidOrderStats();
+    $paid_orders = App::make('Helper')->getPaidOrders(Session::get('paid_order_id'))->sum('count');
+    $paid_orders_history = App::make('Helper')->getPaidOrders(Session::get('history_paid_order_id'))->sum('count');
     $payment_success = App::make('StatsManager')->evalChange($completed_orders, $paid_orders);
-    $paid_orders_change = array('momentum' => 1, 'percent' => '8.23');
+    $payment_success_history = App::make('StatsManager')->evalChange($complete_orders_history, $paid_orders_history);
+
+    $paid_orders_change = App::make('StatsManager')->evalChange($paid_orders_history, $paid_orders);
+
+    $payment_success_change = App::make('StatsManager')->evalChangePercent($payment_success_history['percent'], $payment_success['percent']);
+
+    $history_completed_order_conversion = App::make('StatsManager')->getConversionRate($total_history_device_sessions, $complete_orders_history);
     $completed_order_conversion = App::make('StatsManager')->getConversionRate($total_device_sessions, $completed_orders);
+    $completed_order_conversion_change = App::make('StatsManager')->evalChangePercent($history_completed_order_conversion, $completed_order_conversion);
+
     $paid_order_conversion = App::make('StatsManager')->getConversionRate($total_device_sessions, $paid_orders);
+    $history_paid_order_conversion = App::make('StatsManager')->getConversionRate($total_history_device_sessions, $paid_orders_history);
+    $paid_order_conversion_change = App::make('StatsManager')->evalChangePercent($history_paid_order_conversion, $paid_order_conversion);
     // ========
 ?>
 @section('content')
@@ -258,6 +274,9 @@
             <div class="complete_order_change {{ $sign }}">{{ App::make('Helper')->formatPercent($complete_orders_change['percent']) }}</div>
 
             <div class="checkout_no_order_rate">{{ App::make('Helper')->formatPercent($checkout_no_order['percent']) }}</div>
+            <?php
+                $sign = '';
+            ?>
             @if($cart_abandon_change['momentum'] == 1)
                 <?php $sign = 'up_bad'; ?>
                 <img class="checkout_no_order_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
@@ -267,33 +286,36 @@
             @endif
             <div class="checkout_no_order {{ $sign }}">{{ App::make('Helper')->formatPercent($cart_abandon_change['diff']) }}</div>
             <div class="completed_order_conversion">{{ App::make('Helper')->formatPercent($completed_order_conversion) }}</div>
-            @if($checkout_conversion_change['momentum'] == 1)
+            <?php
+                $sign = '';
+            ?>
+            @if($completed_order_conversion_change['momentum'] == 1)
                 <?php $sign = 'up'; ?>
                 <img class="completed_order_conv_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
-            @elseif($checkout_conversion_change['momentum'] == -1)
+            @elseif($completed_order_conversion_change['momentum'] == -1)
                 <?php $sign = 'down'; ?>
                 <img class="up_side_down completed_order_conv_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
             @endif
-            <div class="completed_order_conv_change {{ $sign }}">{{ App::make('Helper')->formatPercent($checkout_conversion_change['diff']) }}</div>
+            <div class="completed_order_conv_change {{ $sign }}">{{ App::make('Helper')->formatPercent($completed_order_conversion_change['diff']) }}</div>
             <?php
                 $counter = 0;
              ?>
-            @foreach($landing_stats as $landing)
+            @foreach($completed_orders_stats as $row)
                 <?php
                     $sign = '';
                  ?>
                 <div class="completed_container_{{ $counter }}">
-                    <div class="pcms_name text-left pcms_orders">{{ ($counter + 1) . '.' . $landing->name }}</div>
-                    <div class="pcms_session pcms_orders">{{ App::make('Helper')->formatInteger($landing->sessions) }}</div>
-                    <div class="pcms_percent pcms_orders">{{ '(' . App::make('Helper')->formatPercent($landing->percent) . ')' }}</div>
-                    @if($landing->change['momentum'] == 1)
+                    <div class="pcms_name text-left pcms_orders">{{ ($counter + 1) . '.' . $row->name }}</div>
+                    <div class="pcms_session pcms_orders">{{ App::make('Helper')->formatInteger($row->count) }}</div>
+                    <div class="pcms_percent pcms_orders">{{ '(' . App::make('Helper')->formatPercent($row->percent) . ')' }}</div>
+                    @if($row->change['momentum'] == 1)
                         <?php $sign = 'up'; ?>
                         <img class="pcms_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
-                    @elseif($landing->change['momentum'] == -1)
+                    @elseif($row->change['momentum'] == -1)
                         <?php $sign = 'down'; ?>
                         <img class="up_side_down pcms_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
                     @endif
-                    <div class="pcms_change {{ $sign }} pcms_orders">{{ App::make('Helper')->formatPercent($landing->change['percent']) }}</div>
+                    <div class="pcms_change {{ $sign }} pcms_orders">{{ App::make('Helper')->formatPercent($row->change['percent']) }}</div>
                 </div>
                 <?php $counter++; ?>
             @endforeach
@@ -314,43 +336,50 @@
             <div class="paid_orders_change {{ $sign }}">{{ App::make('Helper')->formatPercent($paid_orders_change['percent']) }}</div>
 
             <div class="payment_success_rate">{{ App::make('Helper')->formatPercent($payment_success['percent']) }}</div>
-            @if($cart_abandon_change['momentum'] == 1)
-                <?php $sign = 'up_bad'; ?>
-                <img class="payment_success_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
-            @elseif($cart_abandon_change['momentum'] == -1)
-                <?php $sign = 'down_good'; ?>
-                <img class="up_side_down payment_success_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
+            <?php
+                $sign = '';
+            ?>
+            @if($payment_success_change['momentum'] == 1)
+                <?php $sign = 'up'; ?>
+                <img class="payment_success_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
+            @elseif($payment_success_change['momentum'] == -1)
+                <?php $sign = 'down'; ?>
+                <img class="up_side_down payment_success_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
             @endif
-            <div class="payment_success {{ $sign }}">{{ App::make('Helper')->formatPercent($cart_abandon_change['diff']) }}</div>
+            <div class="payment_success {{ $sign }}">{{ App::make('Helper')->formatPercent($payment_success_change['diff']) }}</div>
             <div class="paid_orders_conversion">{{ App::make('Helper')->formatPercent($paid_order_conversion) }}</div>
-            @if($checkout_conversion_change['momentum'] == 1)
+
+            <?php
+                $sign = '';
+            ?>
+            @if($paid_order_conversion_change['momentum'] == 1)
                 <?php $sign = 'up'; ?>
                 <img class="paid_order_conv_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
-            @elseif($checkout_conversion_change['momentum'] == -1)
+            @elseif($paid_order_conversion_change['momentum'] == -1)
                 <?php $sign = 'down'; ?>
                 <img class="up_side_down paid_order_conv_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
             @endif
-            <div class="paid_order_conv_change {{ $sign }}">{{ App::make('Helper')->formatPercent($checkout_conversion_change['diff']) }}</div>
+            <div class="paid_order_conv_change {{ $sign }}">{{ App::make('Helper')->formatPercent($paid_order_conversion_change['diff']) }}</div>
 
             <?php
                 $counter = 0;
              ?>
-            @foreach($landing_stats as $landing)
+            @foreach($paid_orders_stats as $row)
                 <?php
                     $sign = '';
                  ?>
                 <div class="paid_container_{{ $counter }}">
-                    <div class="pcms_name text-left pcms_orders">{{ ($counter + 1) . '.' . $landing->name }}</div>
-                    <div class="pcms_session pcms_orders">{{ App::make('Helper')->formatInteger($landing->sessions) }}</div>
-                    <div class="pcms_percent pcms_orders">{{ '(' . App::make('Helper')->formatPercent($landing->percent) . ')' }}</div>
-                    @if($landing->change['momentum'] == 1)
+                    <div class="pcms_name text-left pcms_orders">{{ ($counter + 1) . '.' . $row->name }}</div>
+                    <div class="pcms_session pcms_orders">{{ App::make('Helper')->formatInteger($row->count) }}</div>
+                    <div class="pcms_percent pcms_orders">{{ '(' . App::make('Helper')->formatPercent($row->percent) . ')' }}</div>
+                    @if($row->change['momentum'] == 1)
                         <?php $sign = 'up'; ?>
                         <img class="pcms_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
-                    @elseif($landing->change['momentum'] == -1)
+                    @elseif($row->change['momentum'] == -1)
                         <?php $sign = 'down'; ?>
                         <img class="up_side_down pcms_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
                     @endif
-                    <div class="pcms_change {{ $sign }} pcms_orders">{{ App::make('Helper')->formatPercent($landing->change['percent']) }}</div>
+                    <div class="pcms_change {{ $sign }} pcms_orders">{{ App::make('Helper')->formatPercent($row->change['percent']) }}</div>
                 </div>
                 <?php $counter++; ?>
             @endforeach

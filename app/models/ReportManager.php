@@ -2,28 +2,68 @@
 use \Carbon\Carbon;
 class ReportManager
 {
+    public function getPaidOrderStats() {
+        $lists = App::make('Helper')->getPaidOrders(Session::get('paid_order_id'));
+        $history_lists = App::make('Helper')->getPaidOrders(Session::get('history_paid_order_id'));
+        return $this->buildOutputCollection($lists, $history_lists);
+    }
+    public function getCompletedOrderStats() {
+        $lists = App::make('Helper')->getCompletedOrders(Session::get('completed_order_id'));
+        $history_lists = App::make('Helper')->getCompletedOrders(Session::get('history_completed_order_id'));
+        return $this->buildOutputCollection($lists, $history_lists);
+    }
+    public function buildOutputCollection($lists, $history_lists) {
+        $output = new Illuminate\Support\Collection();
+        if (empty($lists) || empty($history_lists)) {
+            return $output;
+        }
+        $totalCount = $lists->sum('count');
+
+        foreach ($lists as $list) {
+            $name = $list->name;
+            $count = $list->count;
+            $found = false;
+            $change = array();
+            foreach ($history_lists as $history_list) {
+                if ($history_list->name == $name) {
+                    $history_count = $history_list->count;
+                    $found = true;
+                }
+            }
+            if ($found) {
+                $change = App::make('StatsManager')->evalChange($history_count, $count);
+            }
+            $temp = array(
+                'name' => $name,
+                'count' => $count,
+                'change' => $change,
+                'percent' => App::make('Helper')->formatDecimal($count / $totalCount * 100) ,
+            );
+            $output->push((object)$temp);
+        }
+        $output = $output->sortByDesc('count');
+        return $output;
+    }
     public function getLandingStats() {
         $output = new Illuminate\Support\Collection();
         $sum = 0;
         $history_sum = 0;
         // Borrow total sessions from device group
         $totalSessions = $this->getTotalSessions('Device', Session::get('device_data_set_id'));
-        foreach(App::make('Helper')->landing_list as $list){
+        foreach (App::make('Helper')->landing_list as $list) {
             $landing = App::make('Helper')->getLanding($list, Session::get($list));
-            $history_landing = App::make('Helper')->getLanding($list, Session::get('history_'.$list));
+            $history_landing = App::make('Helper')->getLanding($list, Session::get('history_' . $list));
             $name = studly_case(str_replace('landing', '', strtolower($list)));
             $change = App::make('StatsManager')->evalChange($history_landing->sessions, $landing->sessions);
-
-
 
             $temp = array(
                 'name' => $name,
                 'sessions' => $landing->sessions,
                 'change' => $change,
-                'percent' => App::make('Helper')->formatDecimal($landing->sessions / $totalSessions * 100),
-                );
-            $sum += $landing->sessions;
-            $history_sum += $history_landing->sessions;
+                'percent' => App::make('Helper')->formatDecimal($landing->sessions / $totalSessions * 100) ,
+            );
+            $sum+= $landing->sessions;
+            $history_sum+= $history_landing->sessions;
             $output->push((object)$temp);
         }
         // Calculate other
@@ -34,11 +74,11 @@ class ReportManager
 
         $name = 'Other';
         $temp = array(
-                'name' => $name,
-                'sessions' => $other_sessions,
-                'change' => $change,
-                'percent' => App::make('Helper')->formatDecimal($other_sessions / $totalSessions * 100),
-                );
+            'name' => $name,
+            'sessions' => $other_sessions,
+            'change' => $change,
+            'percent' => App::make('Helper')->formatDecimal($other_sessions / $totalSessions * 100) ,
+        );
         $output->push((object)$temp);
         $output = $output->sortByDesc('sessions');
         return $output;
@@ -139,7 +179,7 @@ class ReportManager
         return $output;
     }
 
-    public function getSessions($modelName, $name,$dataset_id) {
+    public function getSessions($modelName, $name, $dataset_id) {
         return $modelName::where('dataset_id', '=', $dataset_id)->whereName($name)->sum('sessions');
     }
     public function getTotalSessions($modelName, $dataset_id) {
