@@ -41,6 +41,10 @@
 <script src="{{{ asset('js/bootstrap-datepicker-thai.js') }}}" charset="UTF-8"></script>
 <script src="{{{ asset('js/locales/bootstrap-datepicker.th.js') }}}" charset="UTF-8"></script>
 <script type="text/javascript">
+    $(document).ready(function($) {
+        $(document).trigger('hide-ajax-loading');
+    });
+
     function compare(){
         $(document).trigger('show-ajax-loading');
         // Add precondition here
