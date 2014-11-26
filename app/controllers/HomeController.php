@@ -136,11 +136,8 @@ class HomeController extends BaseController
         if (isset($_GET['code'])) {
             $client = unserialize(Session::get('client'));
             $client->authenticate($_GET['code']);
-            //$_SESSION['access_token'] = $client->getAccessToken();
             Session::put('access_token', $client->getAccessToken());
             Session::put('client', serialize($client));
-            //$start = App::make('Helper')->getDefaultStartDate()->toDateString();
-            //$end = App::make('Helper')->getDefaultEndDate()->toDateString();
             return Redirect::route('front', Session::get('subdomain'));
         }
     }
@@ -159,16 +156,6 @@ class HomeController extends BaseController
                 Session::clear();
                 return Redirect::route('home');
             }
-            // $result = $analytics->data_ga->get('ga:68738788', $startDate, $endDate, App::make('Helper')->matrixs, array(
-            //     'dimensions' => 'ga:deviceCategory',
-            //     'sort' => '-ga:sessions'
-            // ));
-            // s($result);
-
-            // $segments = $analytics->management_segments->listManagementSegments();
-            // s($segments);
-
-
         } else {
             Session::clear();
             return Redirect::route('home');
