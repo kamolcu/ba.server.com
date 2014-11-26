@@ -29,6 +29,19 @@ $env = $app->detectEnvironment(function(){
     if (str_is('Kamols-MacBook-Air.local', $hostname)) {
         return 'local';
     }
+
+    if (str_is('iTrueMartStudio', $hostname)) {
+        return 'local_itm';
+    }
+
+    if (!isset($_SERVER['HTTP_HOST'])) {
+            return 'local';
+    } else {
+        if (strpos($_SERVER['HTTP_HOST'], 'funnel') !== false) {
+            return 'production';
+        }
+    }
+
     return 'production';
 
 });
