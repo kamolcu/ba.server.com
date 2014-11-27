@@ -379,7 +379,9 @@
                         <?php $sign = 'down'; ?>
                         <img class="up_side_down pcms_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
                     @endif
+                    @if(isset($row->change['percent']))
                     <div class="pcms_change {{ $sign }} pcms_orders">{{ App::make('Helper')->formatPercent($row->change['percent']) }}</div>
+                    @endif
                 </div>
                 <?php $counter++; ?>
             @endforeach
