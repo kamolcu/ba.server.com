@@ -372,10 +372,10 @@
                     <div class="pcms_name text-left pcms_orders">{{ ($counter + 1) . '.' . $row->name }}</div>
                     <div class="pcms_session pcms_orders">{{ App::make('Helper')->formatInteger($row->count) }}</div>
                     <div class="pcms_percent pcms_orders">{{ '(' . App::make('Helper')->formatPercent($row->percent) . ')' }}</div>
-                    @if($row->change['momentum'] == 1)
+                    @if(isset($row->change['momentum']) && $row->change['momentum'] == 1)
                         <?php $sign = 'up'; ?>
                         <img class="pcms_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
-                    @elseif($row->change['momentum'] == -1)
+                    @elseif(isset($row->change['momentum']) && $row->change['momentum'] == -1)
                         <?php $sign = 'down'; ?>
                         <img class="up_side_down pcms_sign" alt="" height="15" src="{{ URL::to('/images/up_red_arrow.png') }}">
                     @endif
