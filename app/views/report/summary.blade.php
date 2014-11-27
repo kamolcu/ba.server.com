@@ -195,7 +195,7 @@
             <?php
                 $sign = '';
             ?>
-            <div class="product_page_sessions">{{ App::make('Helper')->formatInteger($product_sessions) }}</div>
+            <div class="product_page_sessions" title="History = {{ $history_product_sessions }}">{{ App::make('Helper')->formatInteger($product_sessions) }}</div>
             @if($productPageChange['momentum'] == 1)
                 <?php $sign = 'up'; ?>
                 <img class="product_page_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
@@ -222,7 +222,7 @@
             <?php
                 $sign = '';
             ?>
-            <div class="checkout_sessions">{{ App::make('Helper')->formatInteger($checkout) }}</div>
+            <div class="checkout_sessions" title="History = {{ $history_checkout }}" >{{ App::make('Helper')->formatInteger($checkout) }}</div>
             @if($checkout_change['momentum'] == 1)
                 <?php $sign = 'up'; ?>
                 <img class="checkout_page_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
