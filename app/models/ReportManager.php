@@ -32,6 +32,11 @@ class ReportManager
             }
             if ($found) {
                 $change = App::make('StatsManager')->evalChange($history_count, $count);
+            } else {
+                $change = array(
+                    'momentum' => 0,
+                    'percent' => 0,
+                );
             }
             $temp = array(
                 'name' => $name,
