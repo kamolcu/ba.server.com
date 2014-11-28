@@ -18,7 +18,7 @@
                     <img width="455" height="425" src="{{ URL::to('/images/cool-404-errors-kitten.jpg') }}" alt="error-pic" />
                 </a>
                 <div>{{ \Carbon\Carbon::now()->toDateTimeString(); }}</div>
-                <div>{{ $message }}</div>
+                <div>Message = {{ $message or 'N/A' }}</div>
             </div>
         </div>
     </div>
