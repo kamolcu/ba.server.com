@@ -15,9 +15,9 @@ class HomeController extends BaseController
     |   Route::get('/', 'HomeController@showWelcome');
     |
     */
-    public function frontPage($subdomain = 'funnel') {
+    public function frontPage() {
 
-        if(Input::has('dev')){
+        if (Input::has('dev')) {
             return View::make('front');
         }
 
@@ -100,7 +100,12 @@ class HomeController extends BaseController
         return Redirect::to('/');
     }
     public function summaryView() {
-        return View::make('report.summary');
+        $client = unserialize(Session::get('client'));
+        if (!empty($client) && $client->getAccessToken()) {
+            return View::make('report.summary');
+        } else {
+            return Redirect::route('front');
+        }
     }
     public function showWelcome() {
         return '';
@@ -133,13 +138,13 @@ class HomeController extends BaseController
         }
     }
     public function oAuth() {
-        if (isset($_GET['code'])) {
-            $client = unserialize(Session::get('client'));
+        $client = unserialize(Session::get('client'));
+        if (isset($_GET['code']) && !empty($client)) {
             $client->authenticate($_GET['code']);
             Session::put('access_token', $client->getAccessToken());
             Session::put('client', serialize($client));
-            return Redirect::route('front', Session::get('subdomain'));
         }
+        return Redirect::route('front');
     }
     public function info() {
         $startDate = Input::get('start_date');
