@@ -14,8 +14,8 @@ return array(
 	*/
 
 	'debug' => true,
-	'google_client_id' => '137589562420-m1hh63jd1eguneonocspufl9d7vr5ki5.apps.googleusercontent.com',
-	'google_secret' => 'Kqx7ak7jM2qr0VtH1de-C-FF',
+	'google_client_id' => '137589562420-nesfpauv357hckug1988c9n064amkje3.apps.googleusercontent.com',
+	'google_secret' => 'a-bUgSTdYAZBI3II_ecJ8Fgr',
 	'' => '',
 
 );

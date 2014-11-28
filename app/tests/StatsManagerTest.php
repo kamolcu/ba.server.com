@@ -26,7 +26,7 @@ class StatsManagerTest extends TestCase
         $this->assertSame('99.73', $result);
 
         $result = App::make('StatsManager')->getPercentChange(569, 207560);
-        $this->assertSame('36,378.03', $result);
+        $this->assertSame('36378.03', $result);
     }
     public function testGetConversionRate() {
         $result = App::make('StatsManager')->getConversionRate(1, 0);
