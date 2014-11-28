@@ -170,4 +170,7 @@ class HomeController extends BaseController
     public function errorView() {
         return View::make('app-error');
     }
+    public function clear() {
+        Session::clear();
+    }
 }

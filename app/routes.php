@@ -68,6 +68,11 @@ Route::get('summary', array(
     'uses' => 'HomeController@summaryView'
 ));
 
+Route::get('clear', array(
+    'as' => 'clear',
+    'uses' => 'HomeController@clear'
+));
+
 Route::get('/download/{filePath}', array(
     'as' => 'file.download',
     function ($filePath) {
