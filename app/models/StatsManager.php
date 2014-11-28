@@ -11,7 +11,10 @@ class StatsManager
         return App::make('Helper')->formatDecimal($diff / $val1 * 100, '');
     }
     public function evalChange($val1, $val2) {
-        $result = array();
+        $result = array(
+            'momentum' => 0,
+            'percent' => 0,
+        );
         if ($val1 == $val2) {
             $result['momentum'] = 0;
         } elseif ($val1 < $val2) {
@@ -24,12 +27,8 @@ class StatsManager
             $result['percent'] = $this->getPercentChange($val1, $val2);
         }
         catch(Exception $ex) {
-            $msg = sprintf('evalChange() exception =  %s, v1 = %s, v2 = %s.', $ex->getMessage(), $val1, $val2);
+            $msg = sprintf('evalChange() exception =  %s, v1 = %s, v2 = %s.', $ex->getMessage() , $val1, $val2);
             Log::error($msg);
-            $result = array(
-                'momentum' => 0,
-                'percent' => 0,
-            );
         }
 
         return $result;
