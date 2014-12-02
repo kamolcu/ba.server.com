@@ -32,6 +32,8 @@ class ReportManager
             }
             if ($found) {
                 $change = App::make('StatsManager')->evalChange($history_count, $count);
+                $msg = sprintf('ReportManager::buildOutputCollection result = %s', print_r($change, true));
+                Log::debug($msg);
             } else {
                 $change = array(
                     'momentum' => 0,
@@ -60,7 +62,8 @@ class ReportManager
             $history_landing = App::make('Helper')->getLanding($list, Session::get('history_' . $list));
             $name = studly_case(str_replace('landing', '', strtolower($list)));
             $change = App::make('StatsManager')->evalChange($history_landing->sessions, $landing->sessions);
-
+            $msg = sprintf('StatsManager::getLandingStats %s result = %s', $name, print_r($change, true));
+            Log::debug($msg);
             $temp = array(
                 'name' => $name,
                 'sessions' => $landing->sessions,
@@ -76,6 +79,8 @@ class ReportManager
         $other_sessions = $totalSessions - $sum;
         $history_other_sessions = $history_total_sessions - $history_sum;
         $change = App::make('StatsManager')->evalChange($history_other_sessions, $other_sessions);
+        $msg = sprintf('StatsManager::getLandingStats "Other" result = %s', $name, print_r($change, true));
+        Log::debug($msg);
 
         $name = 'Other';
         $temp = array(
@@ -96,7 +101,8 @@ class ReportManager
         if (empty($totalSessions)) return array();
         // Compare sessions
         $change = App::make('StatsManager')->evalChange($history_result->sessions, $main_result->sessions);
-
+        $msg = sprintf('ReportManager::getDeviceStats %s result = %s', $device, print_r($change, true));
+        Log::debug($msg);
         $output = array(
             'name' => $device,
             'change' => $change,
@@ -175,6 +181,8 @@ class ReportManager
                 if ($oo['name'] == $hh['name']) {
                     // calculate change
                     $change = App::make('StatsManager')->evalChange($hh['sessions'], $oo['sessions']);
+                    $msg = sprintf('StatsManager::getChannelStats %s', print_r($change, true));
+                    Log::debug($msg);
                     $oo['change'] = $change;
                     $output->offsetSet($counter, $oo);
                 }

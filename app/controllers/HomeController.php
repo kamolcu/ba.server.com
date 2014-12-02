@@ -91,10 +91,22 @@ class HomeController extends BaseController
                 return Redirect::route('summary');
             }
             catch(Google_Auth_Exception $gx) {
-                Log::error($gx->getMessage());
-                Session::clear();
-                return Redirect::to('/');
+                $errMsg = $gx->getMessage() . ', file: ' . $gx->getFile() . ':' . $gx->getLine();
+                Log::error($errMsg);
             }
+            catch(Exception $ex) {
+                $errMsg = $ex->getMessage() . ', file: ' . $ex->getFile() . ':' . $ex->getLine();
+                Log::error($errMsg);
+            }
+
+            $msg = sprintf('Session data = %s', print_r(Session::all() , true));
+            Log::debug($msg);
+
+            $view = View::make('app-error');
+            $view->message = $errMsg;
+
+            Session::clear();
+            return $view;
         }
         Session::clear();
         return Redirect::to('/');
