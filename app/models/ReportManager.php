@@ -79,7 +79,7 @@ class ReportManager
         $other_sessions = $totalSessions - $sum;
         $history_other_sessions = $history_total_sessions - $history_sum;
         $change = App::make('StatsManager')->evalChange($history_other_sessions, $other_sessions);
-        $msg = sprintf('StatsManager::getLandingStats "Other" result = %s', $name, print_r($change, true));
+        $msg = sprintf('StatsManager::getLandingStats "Other" result = %s', print_r($change, true));
         Log::debug($msg);
 
         $name = 'Other';
