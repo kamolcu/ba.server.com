@@ -182,7 +182,7 @@
             <?php
                 $sign = '';
             ?>
-            <div class="landing_page_sessions">{{ App::make('Helper')->formatInteger($total_device_sessions) }}</div>
+            <div class="landing_page_sessions" title="History = {{ App::make('Helper')->formatInteger($total_history_device_sessions) }}">{{ App::make('Helper')->formatInteger($total_device_sessions) }}</div>
             <div class="landing_conversion">{{ App::make('Helper')->formatPercent($landing_conversion) }}</div>
             @if($landing_page_change['momentum'] == 1)
                 <?php $sign = 'up'; ?>
@@ -221,7 +221,7 @@
             <?php
                 $sign = '';
             ?>
-            <div class="product_page_sessions" title="History = {{ $history_product_sessions }}">{{ App::make('Helper')->formatInteger($product_sessions) }}</div>
+            <div class="product_page_sessions" title="History = {{ App::make('Helper')->formatInteger($history_product_sessions) }}">{{ App::make('Helper')->formatInteger($product_sessions) }}</div>
             @if($productPageChange['momentum'] == 1)
                 <?php $sign = 'up'; ?>
                 <img class="product_page_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
@@ -248,7 +248,7 @@
             <?php
                 $sign = '';
             ?>
-            <div class="checkout_sessions" title="History = {{ $history_checkout }}" >{{ App::make('Helper')->formatInteger($checkout) }}</div>
+            <div class="checkout_sessions" title="History = {{ App::make('Helper')->formatInteger($history_checkout) }}" >{{ App::make('Helper')->formatInteger($checkout) }}</div>
             @if($checkout_change['momentum'] == 1)
                 <?php $sign = 'up'; ?>
                 <img class="checkout_page_sign" alt="" height="15" src="{{ URL::to('/images/up_green_arrow.png') }}">
@@ -286,7 +286,7 @@
             {{-- Checkout End --}}
 
             {{-- Completed Orders --}}
-            <div class="complete_order">{{ App::make('Helper')->formatInteger($completed_orders) }}</div>
+            <div class="complete_order" title="History = {{ App::make('Helper')->formatInteger($complete_orders_history) }}">{{ App::make('Helper')->formatInteger($completed_orders) }}</div>
             <?php
                 $sign = '';
             ?>
@@ -348,7 +348,7 @@
             {{-- Completed Orders End --}}
 
             {{-- Paid Orders --}}
-            <div class="paid_orders">{{ App::make('Helper')->formatInteger($paid_orders) }}</div>
+            <div class="paid_orders" title="History = {{ App::make('Helper')->formatInteger($paid_orders_history) }}">{{ App::make('Helper')->formatInteger($paid_orders) }}</div>
             <?php
                 $sign = '';
             ?>
