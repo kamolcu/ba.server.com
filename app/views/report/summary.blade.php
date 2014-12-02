@@ -31,7 +31,6 @@
     $checkout = App::make('ReportManager')->getSessions('GoalFunnel', 'Login',Session::get('product_funnel_id'));
     $history_checkout = App::make('ReportManager')->getSessions('GoalFunnel', 'Login',Session::get('history_product_funnel_id'));
     $checkout_change = App::make('StatsManager')->evalChange($history_checkout, $checkout);
-
     $msg = sprintf('$checkout_change = %s', print_r($checkout_change, true));
     Log::debug($msg);
 
@@ -42,7 +41,6 @@
 
     // Landing Page
     $landing_page_change = App::make('StatsManager')->evalChange($total_history_device_sessions, $total_device_sessions);
-
     $msg = sprintf('$landing_page_change = %s', print_r($landing_page_change, true));
     Log::debug($msg);
 
@@ -53,11 +51,10 @@
     // ========
 
     $cart_abandon = App::make('StatsManager')->evalChange($product_sessions, $checkout);
-    $history_cart_abandon = App::make('StatsManager')->evalChange($history_product_sessions, $history_checkout);
-
     $msg = sprintf('$cart_abandon %s', print_r($cart_abandon, true));
     Log::debug($msg);
 
+    $history_cart_abandon = App::make('StatsManager')->evalChange($history_product_sessions, $history_checkout);
     $msg = sprintf('$history_cart_abandon %s', print_r($history_cart_abandon, true));
     Log::debug($msg);
 
@@ -69,11 +66,10 @@
     $complete_orders_history = App::make('Helper')->getCompletedOrders(Session::get('history_completed_order_id'))->sum('count');
 
     $checkout_no_order = App::make('StatsManager')->evalChange($checkout, $completed_orders);
-    $complete_orders_change = App::make('StatsManager')->evalChange($complete_orders_history, $completed_orders);
-
     $msg = sprintf('$checkout_no_order %s', print_r($checkout_no_order, true));
     Log::debug($msg);
 
+    $complete_orders_change = App::make('StatsManager')->evalChange($complete_orders_history, $completed_orders);
     $msg = sprintf('$complete_orders_change %s', print_r($complete_orders_change, true));
     Log::debug($msg);
 
@@ -81,16 +77,14 @@
     $paid_orders = App::make('Helper')->getPaidOrders(Session::get('paid_order_id'))->sum('count');
     $paid_orders_history = App::make('Helper')->getPaidOrders(Session::get('history_paid_order_id'))->sum('count');
     $payment_success = App::make('StatsManager')->evalChange($completed_orders, $paid_orders);
-    $payment_success_history = App::make('StatsManager')->evalChange($complete_orders_history, $paid_orders_history);
-
     $msg = sprintf('$payment_success %s', print_r($payment_success, true));
     Log::debug($msg);
 
+    $payment_success_history = App::make('StatsManager')->evalChange($complete_orders_history, $paid_orders_history);
     $msg = sprintf('$payment_success_history %s', print_r($payment_success_history, true));
     Log::debug($msg);
 
     $paid_orders_change = App::make('StatsManager')->evalChange($paid_orders_history, $paid_orders);
-
     $msg = sprintf('$paid_orders_change %s', print_r($paid_orders_change, true));
     Log::debug($msg);
 
